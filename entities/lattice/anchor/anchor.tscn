@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhw2sq78h4txe"]
+
+[ext_resource type="Script" uid="uid://3qjhtdprgb1l" path="res://entities/lattice/anchor/anchor.gd" id="1_fd0yo"]
+
+[node name="Anchor" type="Polygon2D"]
+color = Color(0.597176, 0.597176, 0.597176, 1)
+script = ExtResource("1_fd0yo")

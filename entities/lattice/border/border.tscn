@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjdqx24mdd5jy"]
+
+[ext_resource type="Script" uid="uid://tw437sna2vxd" path="res://entities/lattice/border/border.gd" id="1_ioxn1"]
+
+[node name="Border" type="Line2D"]
+width = 3.0
+default_color = Color(0.103744, 0.103744, 0.103744, 1)
+script = ExtResource("1_ioxn1")

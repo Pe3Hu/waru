@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://uvk6dhf0t5ui"]
+
+[ext_resource type="Script" uid="uid://bu2s4esfig4pg" path="res://entities/lattice/road/road.gd" id="1_vf2hn"]
+
+[node name="Road" type="Line2D"]
+width = 4.0
+default_color = Color(0.233925, 0.233925, 0.233925, 1)
+script = ExtResource("1_vf2hn")

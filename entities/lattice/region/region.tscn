@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://duwubh3n86ftg"]
+
+[ext_resource type="Script" uid="uid://ocweflutmi35" path="res://entities/lattice/region/region.gd" id="1_ww8py"]
+
+[node name="Region" type="Polygon2D"]
+color = Color(1, 0.976667, 0.3, 1)
+script = ExtResource("1_ww8py")

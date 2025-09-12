@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpq0g6jrlkuea"]
+
+[ext_resource type="Script" uid="uid://b12ycqhctu6gd" path="res://entities/world/world.gd" id="1_sbgiu"]
+[ext_resource type="PackedScene" uid="uid://c66oihtkel0n7" path="res://entities/lattice/lattice.tscn" id="2_tytc4"]
+
+[node name="World" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_sbgiu")
+
+[node name="FPS" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Lattice" parent="CanvasLayer" instance=ExtResource("2_tytc4")]
