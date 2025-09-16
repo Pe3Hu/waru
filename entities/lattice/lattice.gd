@@ -8,6 +8,8 @@ extends PanelContainer
 @onready var capitals = %Capitals
 @onready var borders = %Borders
 @onready var roads = %Roads
+@onready var sources = %Sources
+@onready var biomes = %Biomes
 
 @onready var anchor_scene = preload("res://entities/lattice/anchor/anchor.tscn")
 @onready var region_scene = preload("res://entities/lattice/region/region.tscn")
@@ -15,21 +17,32 @@ extends PanelContainer
 @onready var capital_scene = preload("res://entities/lattice/domain/capital/capital.tscn")
 @onready var border_scene = preload("res://entities/lattice/border/border.tscn")
 @onready var road_scene = preload("res://entities/lattice/road/road.tscn")
+@onready var source_scene = preload("res://entities/lattice/anchor/source/source.tscn")
+@onready var biome_scene = preload("res://entities/lattice/anchor/biome/biome.tscn")
+
+
+var clusters: Dictionary
+var anchor_borders: Dictionary
+
+var dimensions: Vector2i
+var center_position: Vector2
 
 var anchor_r: float = 6
-var grid_step: float = 48
-var clusters: Dictionary
-var dimensions: Vector2i = Vector2i(7, 7)
-var anchor_borders = {}
+var grid_step: float = 50
+var n_dimension: int = 7
 
 
 func _ready() -> void:
+	dimensions = Vector2i.ONE * n_dimension
+	
 	init_anchors()
 	init_regions()
 	rnd_shift_anchors()
 	init_borders()
 	init_domains()
 	init_roads()
+	init_sources()
+	init_biomes()
 	
 func init_anchors() -> void:
 	#anchors.position = custom_minimum_size * 0.5
@@ -46,10 +59,10 @@ func init_anchors() -> void:
 	
 	var no_corner = clusters[0][dimensions.x - 1][4].position
 	var sw_corner = clusters[dimensions.y - 1][0][1].position
-	var center = (no_corner + sw_corner) / 2
+	center_position = (no_corner + sw_corner) / 2
 	
-	%Nodes2D.position = custom_minimum_size * 0.5 - center
-	#
+	%Nodes2D.position = custom_minimum_size * 0.5 - center_position
+	
 	#for _i in range(anchors.get_child_count() - 1, -1, -1):
 		#var anchor = anchors.get_child(_i)
 		#
@@ -183,6 +196,12 @@ func init_borders() -> void:
 	for region in regions.get_children():
 		region.init_borders()
 	
+	for region in regions.get_children():
+		region.update_acreage()
+	
+	for anchor in anchors.get_children():
+		anchor.update_side_flag()
+	
 func add_border(region_: Region, anchors_: Array) -> void:
 	anchors_.sort_custom(func(a, b): return a.get_index() < b.get_index())
 	var border
@@ -205,10 +224,10 @@ func init_domains() -> void:
 	var prepared_regions = prepare_regions_for_domain()
 	var options = regions.get_children()
 	var failures = []
-	var counter = regions.get_child_count()
+	var counter_unoccupied = regions.get_child_count()
 	
-	while !options.is_empty() and counter > 0:
-		counter -= 1
+	while !options.is_empty() and counter_unoccupied > 0:
+		counter_unoccupied -= 1
 		#print(prepared_regions.size())
 		
 		for prepared_region in prepared_regions:
@@ -369,3 +388,202 @@ func add_road(capitals_: Array) -> void:
 	road.capitals.append_array(capitals_)
 	road.lattice = self
 	roads.add_child(road)
+	
+func init_sources() -> void:
+	for anchor in anchors.get_children():
+		add_source(anchor)
+		
+func add_source(anchor_: Anchor) -> void:
+	var source = source_scene.instantiate()
+	source.anchor = anchor_
+	sources.add_child(source)
+	
+func init_biomes() -> void:
+	var source_acreage = 0
+	
+	for source in sources.get_children():
+		source_acreage += source.acreage
+	
+	var biome_sizes = {}
+	biome_sizes["desert"] = ["average", "small", "small"]
+	biome_sizes["mountain"] = ["average", "small", "small"]
+	biome_sizes["plain"] = ["large"]
+	biome_sizes["swamp"] = ["average", "small", "small"]
+	biome_sizes["forest"] = ["average", "small", "small"]
+	var share_size = {}
+	share_size["large"] = 5
+	share_size["average"] = 3
+	share_size["small"] = 1
+	var total_shares = 0
+	var biome_acreages = {}
+	
+	for biome_terrain in biome_sizes:
+		for size_type in biome_sizes[biome_terrain]:
+			total_shares += share_size[size_type]
+	
+	for biome_terrain in biome_sizes:
+		var biome_share = 0
+		
+		for size_type in biome_sizes[biome_terrain]:
+			biome_share += share_size[size_type]
+		
+		biome_acreages[biome_terrain] = float(biome_share) / total_shares * source_acreage
+	
+	var biome_vertexs = {}
+	biome_vertexs["desert"] = [Vector2(0, 1), Vector2(-0.4, -1), Vector2(0.6, -1)]
+	biome_vertexs["mountain"] = [Vector2(1, 0), Vector2(-1, -0.85), Vector2(-1, 0.5)]
+	biome_vertexs["plain"] = [Vector2(0, 0)]
+	biome_vertexs["swamp"] = [Vector2(-1, 0), Vector2(1, -0.5), Vector2(1, 0.85)]
+	biome_vertexs["forest"] = [Vector2(0, -1), Vector2(-0.6, 1), Vector2(0.4, 1)]
+	
+	var biome_anchor_options = {}
+	
+	for biome_terrain in biome_vertexs:
+		biome_anchor_options[biome_terrain] = {}
+		
+		for biome_vertex in biome_vertexs[biome_terrain]:
+			biome_anchor_options[biome_terrain][biome_vertex] = []
+	
+	var max_d = center_position.length() / n_dimension * 0.75
+	var biome_options = {}
+	var unoccupied_anchors = anchors.get_children()
+	
+	for anchor in anchors.get_children():
+		if anchor.flag_side:
+			var biome_flag = false
+			
+			for biome_terrain in biome_vertexs:
+				if !biome_flag:
+					for biome_vertex in biome_anchor_options[biome_terrain]:
+						var d = (center_position - anchor.position).distance_to(biome_vertex * center_position * 0.5)
+						
+						if d < max_d:
+							biome_anchor_options[biome_terrain][biome_vertex].append(anchor)
+							biome_flag = true
+							break
+	
+	for anchor in anchors.get_children():
+		for biome_vertex in biome_anchor_options["plain"]:
+			var d = (center_position - anchor.position).distance_to(biome_vertexs["plain"].front() * center_position * 0.5)
+			
+			if d < max_d:
+				biome_anchor_options["plain"][biome_vertex].append(anchor)
+	
+	for biome_terrain in biome_vertexs:
+		for _i in biome_anchor_options[biome_terrain].keys().size():
+			var biome_size = biome_sizes[biome_terrain][_i]
+			var biome_vertex = biome_anchor_options[biome_terrain].keys()[_i]
+			biome_anchor_options[biome_terrain][biome_vertex].shuffle()
+			var anchor = biome_anchor_options[biome_terrain][biome_vertex].pop_back()
+			
+			while anchor.source.biome != null:
+				anchor = biome_anchor_options[biome_terrain][biome_vertex].pop_back()
+			
+			if anchor != null:
+				var biome = add_biome(biome_terrain, anchor, biome_size)
+				biome_acreages[biome_terrain] -= anchor.source.acreage
+				add_to_biome_options(biome_options, unoccupied_anchors, anchor, biome)
+	
+	for biome in biomes.get_children():
+		erase_from_biome_options(biome_options, unoccupied_anchors, biome.sources.front().anchor)
+	
+	var biomes_ordered = biomes.get_children()
+	biomes_ordered.shuffle()
+	biomes_ordered.sort_custom(func(a, b): return share_size[a.size] < share_size[b.size])
+	var counter_unoccupied = unoccupied_anchors.size() #(8 + 5 * 3)
+	var counter_prevented = unoccupied_anchors.size()
+	
+	while counter_unoccupied > 0 and counter_prevented > 0:
+		counter_prevented -= 1
+		
+		if biomes_ordered.is_empty():
+			counter_unoccupied = 0
+		
+		var next_biomes = biomes_ordered.duplicate()
+		
+		while !next_biomes.is_empty():
+			var biome = next_biomes.pop_back()
+			
+			if counter_unoccupied > 0:
+				for _i in share_size[biome.size]:
+					if biome_options.keys().has(biome):
+						var anchor = null
+						
+						if !biome_options[biome].is_empty():
+							anchor = biome_options[biome].pick_random()
+						
+						if anchor == null:
+							biome_options.erase(biome)
+						else:
+							counter_unoccupied -= 1
+							biome.add_source(anchor.source)
+							biome_acreages[biome.terrain] -= anchor.source.acreage
+							erase_from_biome_options(biome_options, unoccupied_anchors, anchor)
+							add_to_biome_options(biome_options, unoccupied_anchors, anchor, biome)
+						
+						if biome_acreages[biome.terrain] <= 0:
+							for _j in range(biomes_ordered.size() - 1, -1, -1):
+								if biomes_ordered[_j].terrain == biome.terrain:
+									var biome_ = biomes_ordered[_j]
+									biomes_ordered.erase(biome_)
+									biome_options.erase(biome_)
+					else:
+						break
+	
+	while !unoccupied_anchors.is_empty():
+		var anchor = unoccupied_anchors.pop_front()
+		var neighbor_biomes = []
+		
+		for neighbor in anchor.neighbors:
+			if neighbor.source.biome != null and !neighbor_biomes.has(neighbor.source.biome):
+				neighbor_biomes.append(neighbor.source.biome)
+		
+		if neighbor_biomes.is_empty():
+			unoccupied_anchors.append(anchor)
+		else:
+			var biome = neighbor_biomes.pick_random()
+			biome.add_source(anchor.source)
+	
+	var terrain_acreages = {}
+	
+	for biome in biomes.get_children():
+		biome.update_acreage()
+		
+		if !terrain_acreages.has(biome.terrain):
+			terrain_acreages[biome.terrain] = 0
+		
+		terrain_acreages[biome.terrain] += biome.acreage / source_acreage
+	
+	var ordered_terrains = terrain_acreages.keys()
+	ordered_terrains.sort_custom(func (a, b): return terrain_acreages[a] > terrain_acreages[b])
+	print(ordered_terrains)
+	print(terrain_acreages)
+	
+func add_biome(biome_terrain_: String, anchor_: Anchor, biome_size_: String) -> Biome:
+	var biome = biome_scene.instantiate()
+	biome.lattice = self
+	biome.terrain = biome_terrain_
+	biome.size = biome_size_
+	biome.add_source(anchor_.source)
+	biomes.add_child(biome)
+	return biome
+	
+func erase_from_biome_options(biome_options_:Dictionary, unoccupied_anchors_: Array, anchor_: Anchor) -> void:
+	unoccupied_anchors_.erase(anchor_)
+	
+	for biome in biome_options_:
+		biome_options_[biome] = biome_options_[biome].filter(func(a): return unoccupied_anchors_.has(a))
+	
+func add_to_biome_options(biome_options_:Dictionary, unoccupied_anchors_: Array, anchor_: Anchor, biome_: Biome) -> void:
+	if biome_.sources.size() == 1:
+		biome_options_[biome_] = []
+		biome_options_[biome_].append_array(anchor_.neighbors.keys())
+	else:
+		for neighbor in anchor_.neighbors:
+			if unoccupied_anchors_.has(neighbor) and neighbor.source.biome == null:
+				biome_options_[biome_].append(neighbor)
+#func get_next_biome_anchor(unoccupied_anchors_: Array, biome_: Biome) -> Variant:
+	#if unoccupied_anchors_[biome_].is_empty():
+		#return null
+	#
+	#return unoccupied_anchors_[biome_].pick_random()

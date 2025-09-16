@@ -50,8 +50,15 @@ func init_direction() -> void:
 		dict.direction.hybrid.append(direction)
 	
 func init_color():
-	pass
-	#var h = 360.0
+	var h = 360.0
+	
+	dict.color = {}
+	dict.color.terrain = {}
+	dict.color.terrain["desert"] = Color.from_hsv(60 / h, 0.8, 0.5)
+	dict.color.terrain["mountain"] = Color.from_hsv(210 / h, 0.8, 0.5)
+	dict.color.terrain["plain"] = Color.from_hsv(30 / h, 0.8, 0.5)
+	dict.color.terrain["swamp"] = Color.from_hsv(270 / h, 0.8, 0.5)
+	dict.color.terrain["forest"] = Color.from_hsv(120 / h, 0.8, 0.5)
 	
 	#color.  Color.from_hsv(160 / h, 0.8, 0.5)
 	
@@ -94,4 +101,4 @@ func get_acreage_triangle(points_: Array) -> float:
 	var a = points_[0]
 	var b = points_[1]
 	var c = points_[2]
-	return (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2
+	return abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2)

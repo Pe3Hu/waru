@@ -10,6 +10,9 @@ var lattice: Lattice:
 
 var anchors: Array[Anchor]
 var regions: Array[Region]
+
+var center: Vector2
+
 var internal_flag: bool = false
 
 
@@ -17,12 +20,17 @@ func init_vertexs() -> void:
 	for anchor in anchors:
 		var vertex = anchor.position
 		add_point(vertex)
+		center += vertex / anchors.size()
 	
 	anchors[0].borders[self] = anchors[1]
 	anchors[1].borders[self] = anchors[0]
 	
+	anchors[0].neighbors[anchors[1]] = self
+	anchors[1].neighbors[anchors[0]] = self
+	
 func add_region(region_: Region) -> void:
 	regions.append(region_)
+	region_.all_borders.append(self)
 	
 	if regions.size() == 2:
 		#for _i in regions.size():
@@ -51,3 +59,11 @@ func get_another_region(region_: Region) -> Region:
 		index = 1
 	
 	return regions[index]
+	
+func get_another_anchor(anchor_: Anchor) -> Anchor:
+	var index = 0
+	
+	if anchors[index] == anchor_:
+		index = 1
+	
+	return anchors[index]

@@ -38,7 +38,7 @@ func add_region(region_: Region) -> void:
 	
 func recolor_regions() -> void:
 	var h = float(get_index()) / lattice.domains.get_child_count()
-	var region_color = color.from_hsv(h, 0.8, 0.8)
+	var region_color = Color.from_hsv(h, 0.8, 0.8)
 	
 	for region in regions:
 		region.color = region_color
@@ -54,22 +54,19 @@ func update_acreage() -> void:
 	acreage = 0
 	
 	for region in regions:
-		acreage += region.acreage
+		acreage += region.total_acreage
 	
 func init_borders() -> void:
 	var internal_borders = []
 	var external_borders = []
 	
 	for region in regions:
-		#print([region.anchors.size()])
 		for border in region.borders:
 			if external_borders.has(border):
 				external_borders.erase(border)
 				internal_borders.append(border)
 			
 			external_borders.append(border)
-	
-	#print([internal_borders.size(), external_borders.size()])
 	
 	for border in external_borders:
 		var external_region = border.regions[0]
@@ -79,7 +76,8 @@ func init_borders() -> void:
 		
 		var neighbor = external_region.domain
 		
-		if !domain_borders.has(neighbor):
-			domain_borders[neighbor] = []
-		
-		domain_borders[neighbor].append(border)
+		if neighbor != null:
+			if !domain_borders.has(neighbor):
+				domain_borders[neighbor] = []
+			
+			domain_borders[neighbor].append(border)

@@ -3,14 +3,17 @@ extends Polygon2D
 
 
 var anchors: Array[Anchor]
+var all_borders: Array[Border]
+
 var borders: Dictionary
 var neighbors: Dictionary
+
 var domain: Domain = null:
 	set(value_):
 		domain = value_
 		
 		vacant_flag = false
-		update_acreage()
+		update_total_acreage()
 
 var lattice: Lattice:
 	set(value_):
@@ -18,8 +21,11 @@ var lattice: Lattice:
 		
 		init_vertexs()
 
+var center = Vector2()
+
 var vacant_neighbors: int = 0
-var acreage: float
+var total_acreage: float
+var captured_acreage: float
 
 var vacant_flag: bool = false
 var failure_flag: bool = false
@@ -62,29 +68,48 @@ func update_count_vacant_neighbors() -> void:
 	if domain != null:
 		vacant_flag = false
 	
-func update_acreage() -> void:
-	acreage = 0
-	
-	var points = [anchors[0].position, anchors[1].position, anchors[2].position]
-	acreage += Global.get_acreage_triangle(points)
-	
-	if anchors.size() > 3:
-		points = [anchors[0].position, anchors[3].position, anchors[2].position]
-		acreage += Global.get_acreage_triangle(points)
-	
 func rnd_shift_anchors() -> void:
-	var center = Vector2()
-	var shifted_vertexs = []
+	#var shifted_vertexs = []
 	
 	for anchor in anchors:
 		center += anchor.position / anchors.size()
 	
 	for anchor in anchors:
 		var direction = anchor.position - center
-		var rnd_scale = randf_range(0.9, 1.1)
+		var rnd_scale = 1#randf_range(0.9, 1.1)
 		anchor.position = center + direction * rnd_scale
-	
-	update_acreage()
 	
 func update_polygon_vertexs() -> void:
 	init_vertexs()
+	
+func update_acreage() -> void:
+	center = Vector2()
+	
+	for anchor in anchors:
+		center += anchor.position / anchors.size()
+	
+	update_total_acreage()
+	update_captured_acreage()
+	
+func update_total_acreage() -> void:
+	total_acreage = 0
+	
+	for _i in range(0, anchors.size(), 1):
+		var _j = (_i + 1) % anchors.size()
+		var points = [center, anchors[_i].position, anchors[_j].position]
+		total_acreage += Global.get_acreage_triangle(points)
+	
+	#var points = [anchors[0].position, anchors[1].position, anchors[2].position]
+	#total_acreage += Global.get_acreage_triangle(points)
+	#
+	#if anchors.size() > 3:
+		#points = [anchors[0].position, anchors[3].position, anchors[2].position]
+		#total_acreage += Global.get_acreage_triangle(points)
+	
+func update_captured_acreage() -> void:
+	captured_acreage = 0
+	
+	for _i in range(0, all_borders.size(), 1):
+		var _j = (_i + 1) % all_borders.size()
+		var points = [center, all_borders[_i].center, all_borders[_j].center]
+		captured_acreage += Global.get_acreage_triangle(points)

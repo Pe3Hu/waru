@@ -1,7 +1,11 @@
-res://entities/lattice/road/road.tscn
-res://entities/lattice/domain/domain.gd
-res://entities/lattice/border/border.gd
-res://entities/lattice/lattice.gd
 res://entities/lattice/lattice.tscn
-res://entities/lattice/domain/domain.tscn
-res://entities/lattice/domain/capital/capital.tscn
+res://entities/lattice/anchor/source/source.tscn
+res://entities/lattice/anchor/biome/biome.tscn
+res://entities/lattice/lattice.gd
+res://entities/lattice/region/region.gd
+res://entities/lattice/border/border.gd
+res://entities/lattice/anchor/source/source.gd
+res://entities/lattice/domain/domain.gd
+res://script/Global.gd
+res://entities/lattice/anchor/anchor.gd
+res://entities/lattice/anchor/biome/biome.gd

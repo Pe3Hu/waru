@@ -7,8 +7,14 @@ var lattice: Lattice:
 		lattice = value_
 		
 		init_vertexs()
+var source: Source
+
 var borders: Dictionary
+var neighbors: Dictionary
 var regions: Array[Region]
+
+var flag_side: bool = false
+
 
 func init_vertexs() -> void:
 	var vertexs = []
@@ -18,3 +24,14 @@ func init_vertexs() -> void:
 		vertexs.append(vertex)
 	
 	polygon = vertexs
+	
+func update_side_flag() -> void:
+	flag_side = false
+	var border_counter = 0
+	
+	for border in borders:
+		if border.regions.size() == 1:
+			border_counter += 1
+	
+	if border_counter == 2:
+		flag_side = true

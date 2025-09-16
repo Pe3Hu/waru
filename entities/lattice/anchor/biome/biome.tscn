@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://xjudt6lr60oa"]
+
+[ext_resource type="Script" uid="uid://cg2u6fpcqbwmd" path="res://entities/lattice/anchor/biome/biome.gd" id="1_k5fmd"]
+
+[node name="Biome" type="Node2D"]
+script = ExtResource("1_k5fmd")
