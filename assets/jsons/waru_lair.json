@@ -1,0 +1,121 @@
+[
+ {
+  "terrain": "desert",
+  "element": "wind",
+  "hawk": 4
+ },
+ {
+  "terrain": "desert",
+  "element": "earth",
+  "bear": 3
+ },
+ {
+  "terrain": "desert",
+  "element": "lava",
+  "turtle": 2,
+  "snake": 2,
+  "ram": 6
+ },
+ {
+  "terrain": "desert",
+  "element": "fire",
+  "hawk": 1,
+  "lion": 6,
+  "wolf": 2
+ },
+ {
+  "terrain": "mountain",
+  "element": "wind",
+  "hawk": 4,
+  "fox": 2,
+  "lion": 2
+ },
+ {
+  "terrain": "mountain",
+  "element": "ice",
+  "turtle": 6
+ },
+ {
+  "terrain": "mountain",
+  "element": "earth",
+  "bear": 3
+ },
+ {
+  "terrain": "mountain",
+  "element": "lava",
+  "ram": 6
+ },
+ {
+  "terrain": "mountain",
+  "element": "lightning",
+  "hawk": 1,
+  "lion": 2,
+  "wolf": 6
+ },
+ {
+  "terrain": "plain",
+  "element": "wind",
+  "hawk": 4
+ },
+ {
+  "terrain": "plain",
+  "element": "aqua",
+  "fox": 4,
+  "snake": 2
+ },
+ {
+  "terrain": "plain",
+  "element": "earth",
+  "bear": 3
+ },
+ {
+  "terrain": "plain",
+  "element": "fire",
+  "hawk": 1,
+  "lion": 6
+ },
+ {
+  "terrain": "plain",
+  "element": "lightning",
+  "hawk": 1,
+  "wolf": 6
+ },
+ {
+  "terrain": "swamp",
+  "element": "ice",
+  "turtle": 6,
+  "bear": 2,
+  "ram": 2
+ },
+ {
+  "terrain": "swamp",
+  "element": "aqua",
+  "fox": 4
+ },
+ {
+  "terrain": "swamp",
+  "element": "nature",
+  "fox": 1,
+  "snake": 6,
+  "bear": 2
+ },
+ {
+  "terrain": "forest",
+  "element": "aqua",
+  "fox": 4,
+  "wolf": 2
+ },
+ {
+  "terrain": "forest",
+  "element": "nature",
+  "fox": 1,
+  "snake": 6
+ },
+ {
+  "terrain": "forest",
+  "element": "earth",
+  "turtle": 2,
+  "bear": 3,
+  "ram": 2
+ }
+]

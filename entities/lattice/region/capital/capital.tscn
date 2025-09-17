@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b8l2up4aj561a"]
 
-[ext_resource type="Script" uid="uid://cilu7jep2qfyu" path="res://entities/lattice/domain/capital/capital.gd" id="1_mxjn6"]
+[ext_resource type="Script" uid="uid://cilu7jep2qfyu" path="res://entities/lattice/region/capital/capital.gd" id="1_mxjn6"]
 
 [node name="Capital" type="Polygon2D"]
 script = ExtResource("1_mxjn6")

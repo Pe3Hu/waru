@@ -21,10 +21,22 @@ func _ready() -> void:
 	#get_tree().bourse.resource.after_init()
 	
 func init_arr() -> void:
-	pass
+	arr.aspect = ["strength", "agility", "observation", "endurance"]
+	arr.battle_aspect = ["strength", "agility", "observation"]
+	arr.aspect_pair = [
+		["strength", "agility"],
+		["agility", "observation"],
+		["observation", "strength"],
+		["agility", "strength"],
+		["observation", "agility"],
+		["strength", "observation"],
+	]
 	
 func init_dict() -> void:
 	init_direction()
+	
+	init_biome()
+	init_lair()
 	
 func init_direction() -> void:
 	dict.direction = {}
@@ -49,6 +61,41 @@ func init_direction() -> void:
 		direction = dict.direction.diagonal[_i]
 		dict.direction.hybrid.append(direction)
 	
+func init_biome() -> void:
+	dict.biome = {}
+	dict.biome.title = {}
+	
+	var path = "res://assets/jsons/waru_biome.json"
+	var array = load_data(path)
+	var exceptions = ["title"]
+	
+	for biome in array:
+		dict.biome.title[biome.title] = {}
+		var elements = biome.keys().filter(func (a): return !exceptions.has(a))
+		
+		for element in elements:
+			dict.biome.title[biome.title][element] = biome[element]
+	
+func init_lair() -> void:
+	dict.terrain = {}
+	dict.terrain.element = {}
+	
+	var path = "res://assets/jsons/waru_lair.json"
+	var array = load_data(path)
+	var exceptions = ["terrain", "element"]
+	
+	for lair in array:
+		if !dict.terrain.element.has(lair.terrain):
+			dict.terrain.element[lair.terrain] = {}
+			
+		if !dict.terrain.element[lair.terrain].has(lair.element):
+			dict.terrain.element[lair.terrain][lair.element] = {}
+		
+		var beasts = lair.keys().filter(func (a): return !exceptions.has(a))
+		
+		for beast in beasts:
+			dict.terrain.element[lair.terrain][lair.element][beast] = lair[beast]
+	
 func init_color():
 	var h = 360.0
 	
@@ -60,7 +107,15 @@ func init_color():
 	dict.color.terrain["swamp"] = Color.from_hsv(270 / h, 0.8, 0.5)
 	dict.color.terrain["forest"] = Color.from_hsv(120 / h, 0.8, 0.5)
 	
-	#color.  Color.from_hsv(160 / h, 0.8, 0.5)
+	dict.color.element = {}
+	dict.color.element["wind"] = Color.from_hsv(60 / h, 0.9, 0.7)
+	dict.color.element["ice"] = Color.from_hsv(170 / h, 0.9, 0.7)
+	dict.color.element["aqua"] = Color.from_hsv(210 / h, 0.9, 0.7)
+	dict.color.element["nature"] = Color.from_hsv(120 / h, 0.9, 0.7)
+	dict.color.element["earth"] = Color.from_hsv(30 / h, 0.9, 0.7)
+	dict.color.element["lava"] = Color.from_hsv(330 / h, 0.9, 0.7)
+	dict.color.element["fire"] = Color.from_hsv(0 / h, 0.9, 0.7)
+	dict.color.element["lightning"] = Color.from_hsv(270 / h, 0.9, 0.7)
 	
 func save(path_: String, data_): #: String
 	var file = FileAccess.open(path_, FileAccess.WRITE)

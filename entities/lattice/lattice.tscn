@@ -22,7 +22,6 @@ unique_name_in_owner = true
 
 [node name="Regions" type="Node2D" parent="Nodes2D"]
 unique_name_in_owner = true
-visible = false
 
 [node name="Domains" type="Node2D" parent="Nodes2D"]
 unique_name_in_owner = true
@@ -45,5 +44,9 @@ unique_name_in_owner = true
 visible = false
 
 [node name="Biomes" type="Node2D" parent="Nodes2D"]
+unique_name_in_owner = true
+visible = false
+
+[node name="Lairs" type="Node2D" parent="Nodes2D"]
 unique_name_in_owner = true
 visible = false

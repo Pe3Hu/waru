@@ -1,0 +1,37 @@
+[
+ {
+  "title": "desert",
+  "wind": 4,
+  "earth": 3,
+  "lava": 8,
+  "fire": 4
+ },
+ {
+  "title": "mountain",
+  "wind": 4,
+  "ice": 8,
+  "earth": 3,
+  "lava": 4,
+  "lightning": 8
+ },
+ {
+  "title": "plain",
+  "wind": 4,
+  "aqua": 3,
+  "earth": 3,
+  "fire": 8,
+  "lightning": 4
+ },
+ {
+  "title": "swamp",
+  "ice": 4,
+  "aqua": 6,
+  "nature": 4
+ },
+ {
+  "title": "forest",
+  "aqua": 3,
+  "nature": 8,
+  "earth": 3
+ }
+]

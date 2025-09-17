@@ -1,0 +1,106 @@
+[
+ {
+  "title": "hawk",
+  "type": "beast",
+  "strength ": 4,
+  "agility ": 6,
+  "observation": 2
+ },
+ {
+  "title": "turtle",
+  "type": "beast",
+  "strength ": 8,
+  "observation": 4
+ },
+ {
+  "title": "fox",
+  "type": "beast",
+  "strength ": 6,
+  "agility ": 2,
+  "endurance": 4
+ },
+ {
+  "title": "snake",
+  "type": "beast",
+  "strength ": 4,
+  "endurance": 8
+ },
+ {
+  "title": "bear",
+  "type": "beast",
+  "agility ": 4,
+  "observation": 6,
+  "endurance": 2
+ },
+ {
+  "title": "ram",
+  "type": "beast",
+  "agility ": 4,
+  "observation": 8
+ },
+ {
+  "title": "lion",
+  "type": "beast",
+  "agility ": 8,
+  "endurance": 4
+ },
+ {
+  "title": "wolf",
+  "type": "beast",
+  "strength ": 2,
+  "observation": 4,
+  "endurance": 6
+ },
+ {
+  "title": "wind",
+  "type": "element",
+  "strength ": 2,
+  "agility ": 3,
+  "observation": 1
+ },
+ {
+  "title": "ice",
+  "type": "element",
+  "observation": 4,
+  "endurance": 2
+ },
+ {
+  "title": "aqua",
+  "type": "element",
+  "agility ": 2,
+  "observation": 3,
+  "endurance": 1
+ },
+ {
+  "title": "nature",
+  "type": "element",
+  "strength ": 3,
+  "agility ": 1,
+  "endurance": 2
+ },
+ {
+  "title": "earth",
+  "type": "element",
+  "strength ": 1,
+  "observation": 2,
+  "endurance": 3
+ },
+ {
+  "title": "lava",
+  "type": "element",
+  "strength ": 2,
+  "endurance": 4
+ },
+ {
+  "title": "fire",
+  "type": "element",
+  "strength ": 4,
+  "agility ": 2
+ },
+ {
+  "title": "lightning",
+  "type": "element",
+  "agility ": 4,
+  "observation": 2
+ }
+]

@@ -10,16 +10,20 @@ extends PanelContainer
 @onready var roads = %Roads
 @onready var sources = %Sources
 @onready var biomes = %Biomes
+@onready var lairs = %Lairs
 
 @onready var anchor_scene = preload("res://entities/lattice/anchor/anchor.tscn")
 @onready var region_scene = preload("res://entities/lattice/region/region.tscn")
-@onready var domain_scene = preload("res://entities/lattice/domain/domain.tscn")
-@onready var capital_scene = preload("res://entities/lattice/domain/capital/capital.tscn")
+@onready var domain_scene = preload("res://entities/lattice/region/domain/domain.tscn")
+@onready var capital_scene = preload("res://entities/lattice/region/capital/capital.tscn")
 @onready var border_scene = preload("res://entities/lattice/border/border.tscn")
 @onready var road_scene = preload("res://entities/lattice/road/road.tscn")
 @onready var source_scene = preload("res://entities/lattice/anchor/source/source.tscn")
 @onready var biome_scene = preload("res://entities/lattice/anchor/biome/biome.tscn")
+@onready var lair_scene = preload("res://entities/lattice/anchor/lair/lair.tscn")
 
+
+var cradle_resource: CradleResource
 
 var clusters: Dictionary
 var anchor_borders: Dictionary
@@ -29,20 +33,27 @@ var center_position: Vector2
 
 var anchor_r: float = 6
 var grid_step: float = 50
+var lair_acreage: float = 100
 var n_dimension: int = 7
+
+var terrain_noise: FastNoiseLite = FastNoiseLite.new()
 
 
 func _ready() -> void:
 	dimensions = Vector2i.ONE * n_dimension
+	cradle_resource = CradleResource.new()
 	
-	init_anchors()
-	init_regions()
-	rnd_shift_anchors()
-	init_borders()
-	init_domains()
-	init_roads()
-	init_sources()
-	init_biomes()
+	#init_anchors()
+	#init_regions()
+	#rnd_shift_anchors()
+	#init_borders()
+	#init_domains()
+	#init_roads()
+	#init_sources()
+	#init_biomes()
+	#init_energy()
+	#init_lairs()
+	#init_skills()
 	
 func init_anchors() -> void:
 	#anchors.position = custom_minimum_size * 0.5
@@ -68,7 +79,7 @@ func init_anchors() -> void:
 		#
 		#if anchor.position.x <= no_corner.x and anchor.position.x >= sw_corner.x and anchor.position.y >= no_corner.y and anchor.position.y <= sw_corner.y:
 			#anchor.color = Color.LIGHT_SLATE_GRAY
-		
+	
 func add_cluster_row() -> void:
 	var row_index = clusters.keys().size()
 	clusters[row_index] = []
@@ -147,10 +158,8 @@ func init_regions() -> void:
 					for _j in _rows.size():
 						var index = _indexs[_j]
 						var row = _row + _rows[_j]
-						#print([_col, col])
 						var anchor = clusters[row][_col][index]
 						
-						#if clusters[row].has(col):
 						anchors_.append(anchor)
 					
 					add_region(anchors_)
@@ -228,7 +237,6 @@ func init_domains() -> void:
 	
 	while !options.is_empty() and counter_unoccupied > 0:
 		counter_unoccupied -= 1
-		#print(prepared_regions.size())
 		
 		for prepared_region in prepared_regions:
 			options.erase(prepared_region)
@@ -490,7 +498,7 @@ func init_biomes() -> void:
 	var biomes_ordered = biomes.get_children()
 	biomes_ordered.shuffle()
 	biomes_ordered.sort_custom(func(a, b): return share_size[a.size] < share_size[b.size])
-	var counter_unoccupied = unoccupied_anchors.size() #(8 + 5 * 3)
+	var counter_unoccupied = unoccupied_anchors.size()
 	var counter_prevented = unoccupied_anchors.size()
 	
 	while counter_unoccupied > 0 and counter_prevented > 0:
@@ -556,8 +564,6 @@ func init_biomes() -> void:
 	
 	var ordered_terrains = terrain_acreages.keys()
 	ordered_terrains.sort_custom(func (a, b): return terrain_acreages[a] > terrain_acreages[b])
-	print(ordered_terrains)
-	print(terrain_acreages)
 	
 func add_biome(biome_terrain_: String, anchor_: Anchor, biome_size_: String) -> Biome:
 	var biome = biome_scene.instantiate()
@@ -587,3 +593,173 @@ func add_to_biome_options(biome_options_:Dictionary, unoccupied_anchors_: Array,
 		#return null
 	#
 	#return unoccupied_anchors_[biome_].pick_random()
+	
+func init_energy() -> void:
+	var unoccupied_regions = regions.get_children()
+	var waves = []
+	var next_wave = []
+	var max_noise = 0.0
+	var min_noise = 1.0
+	
+	for region in regions.get_children():
+		var noise_value = terrain_noise.get_noise_2dv(region.center)
+		
+		if noise_value > max_noise:
+			max_noise = noise_value
+		if noise_value < min_noise:
+			min_noise = noise_value
+		
+		var region_biomes = []
+		
+		for anchor in region.anchors:
+			if !region_biomes.has(anchor.source.biome):
+				region_biomes.append(anchor.source.biome)
+		
+		region.visible = false
+		
+		if region_biomes.size() > 2:
+			next_wave.append(region)
+	
+	waves.append(next_wave)
+	unoccupied_regions = unoccupied_regions.filter(func(a): return !next_wave.has(a))
+	var stopper = 10
+	
+	while stopper > 0 and !unoccupied_regions.is_empty():
+		stopper -= 1
+		var previous_wave = waves.back()
+		next_wave = []
+		
+		for region in previous_wave:
+			for neighbor in region.neighbors:
+				if unoccupied_regions.has(neighbor) and !next_wave.has(neighbor):
+					next_wave.append(neighbor)
+		
+		if next_wave.is_empty():
+			stopper = 0
+		else:
+			waves.append(next_wave)
+			unoccupied_regions = unoccupied_regions.filter(func(a): return !next_wave.has(a))
+		
+	for _i in waves.size():
+		var wave = waves[_i]
+		var wave_weight = 1.0 / (waves.size() - 1) * _i
+		
+		for region in wave:
+			var noise_weight = remap(terrain_noise.get_noise_2dv(region.center), min_noise, max_noise, 0, 1)
+			var v = (wave_weight * 4 + noise_weight * 3) / 7
+			#region.color = Color.from_hsv(0.0, 0.0, v)
+			#region.visible = true
+			#region.energy = ceil(pow(1.0 + float(_i + 1) / waves.size(), 3) * 12.5)
+			region.energy = ceil(pow(1.0 + v, 3) * 12.5)
+	
+	for source in sources.get_children():
+		for region in source.anchor.regions:
+			source.energy += region.energy / region.anchors.size()
+	
+	#recolor_sources_by_energy()
+	#recolor_regions_by_energy()
+	
+func recolor_regions_by_energy() -> void:
+	var max_energy = 0.0
+	var min_energy = regions.get_child(0).energy
+	
+	for region in regions.get_children():
+		if max_energy < region.energy:
+			max_energy = region.energy
+		if min_energy > region.energy:
+			min_energy = region.energy
+	
+	for region in regions.get_children():
+		region.visible = true
+		var energy_weight = remap(region.energy, min_energy, max_energy, 0, 1)
+		region.color = Color.from_hsv(0.0, 0.0, energy_weight)
+	
+func recolor_sources_by_energy() -> void:
+	var h = 360.0
+	var hues = {}
+	hues["desert"] = 60.0 / h
+	hues["mountain"] = 210.0 / h
+	hues["plain"] = 30.0 / h
+	hues["swamp"] = 270.0 / h
+	hues["forest"] = 120.0 / h
+	
+	var max_energy = 0.0
+	var min_energy = regions.get_child(0).energy * 4
+	
+	for source in sources.get_children():
+		if max_energy < source.energy:
+			max_energy = source.energy
+		if min_energy > source.energy:
+			min_energy = source.energy
+	
+	for source in sources.get_children():
+		var energy_weight = remap(source.energy, min_energy, max_energy, 0, 1)
+		source.color = Color.from_hsv(hues[source.biome.terrain], 0.8, energy_weight)
+	
+func init_lairs() -> void:
+	var source_acreage = 0
+	var exceptions = []
+	
+	for source in sources.get_children():
+		source_acreage += source.acreage
+	
+	var elements_limit = {}
+	
+	for element in Global.dict.color.element:
+		elements_limit[element] = source_acreage / Global.dict.color.element.keys().size()
+	
+	for source in sources.get_children():
+		source.roll_element(exceptions)
+		elements_limit[source.element] -= source.acreage
+		
+		if elements_limit[source.element] <= 0:
+			#elements_limit.erase(source.element)
+			exceptions.append(source.element)
+	
+	#var elements = {}
+	#
+	#for source in sources.get_children():
+		#if !elements.has(source.element):
+			#elements[source.element] = 0
+		#
+		#elements[source.element] += source.acreage / source_acreage * 100
+	
+	#var avg_acreage = 0
+	#print(source_acreage/ sources.get_child_count())
+	
+	var min_concentration = 1000
+	var avg_concentration = 0
+	var max_concentration = 0
+	
+	for lair in lairs.get_children():
+		avg_concentration += lair.concentration / lairs.get_child_count()
+		
+		if lair.concentration > max_concentration:
+			max_concentration = lair.concentration
+		if lair.concentration < min_concentration:
+			min_concentration = lair.concentration
+	
+	print([min_concentration, avg_concentration, max_concentration])
+	var beasts = {}
+	
+	for lair in lairs.get_children():
+		if !beasts.has(lair.beast):
+			beasts[lair.beast] = {}
+			beasts[lair.beast].total = 0
+		
+		if !beasts[lair.beast].has(lair.source.element):
+			beasts[lair.beast][lair.source.element] = 0
+		
+		beasts[lair.beast].total += 1
+		beasts[lair.beast][lair.source.element] += 1
+	
+func add_lair(source_: Source, acreage_: float, beast_: String) -> void:
+	var lair = lair_scene.instantiate()
+	lair.source = source_
+	lair.acreage = acreage_
+	lair.beast = beast_
+	lairs.add_child(lair)
+	source_.lairs.append(lair)
+	
+func init_skills() -> void:
+	pass

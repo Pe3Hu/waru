@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://demooh1k10hb"]
 
-[ext_resource type="Script" uid="uid://bfhqpaa27b866" path="res://entities/lattice/domain/domain.gd" id="1_bgbtp"]
+[ext_resource type="Script" uid="uid://bfhqpaa27b866" path="res://entities/lattice/region/domain/domain.gd" id="1_bgbtp"]
 
 [node name="Domain" type="Polygon2D"]
 script = ExtResource("1_bgbtp")

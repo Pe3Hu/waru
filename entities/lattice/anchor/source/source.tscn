@@ -5,3 +5,6 @@
 [node name="Source" type="Polygon2D"]
 color = Color(1, 1, 1, 0.462745)
 script = ExtResource("1_mgmh4")
+
+[node name="Element" type="Polygon2D" parent="."]
+unique_name_in_owner = true

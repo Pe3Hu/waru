@@ -26,6 +26,7 @@ var center = Vector2()
 var vacant_neighbors: int = 0
 var total_acreage: float
 var captured_acreage: float
+var energy: float
 
 var vacant_flag: bool = false
 var failure_flag: bool = false
@@ -113,3 +114,7 @@ func update_captured_acreage() -> void:
 		var _j = (_i + 1) % all_borders.size()
 		var points = [center, all_borders[_i].center, all_borders[_j].center]
 		captured_acreage += Global.get_acreage_triangle(points)
+	
+func recolor_energy() -> void:
+	var v = 0.4
+	color = Color.from_hsv(0.0, 0.0, v)
