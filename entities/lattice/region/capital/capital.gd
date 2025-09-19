@@ -2,25 +2,19 @@ class_name Capital
 extends Polygon2D
 
 
-@export var domain: Domain
+var resource: CapitalResource:
+	set(value_):
+		resource = value_
+		
+		init_vertexs()
 
-var roads: Dictionary
-
-
-func _ready() -> void:
-	init_vertexs()
 	
 func init_vertexs() -> void:
+	position = resource.position
 	var vertexs = []
 	
 	for direction in Global.dict.direction.linear2:
-		var vertex = direction * domain.lattice.anchor_r
+		var vertex = direction * resource.domain.lattice.anchor_r
 		vertexs.append(vertex)
 	
 	polygon = vertexs
-	
-func calc_position() -> void:
-	position = Vector2()
-	
-	for anchor in domain.anchors:
-		position += anchor.position / domain.anchors.size()

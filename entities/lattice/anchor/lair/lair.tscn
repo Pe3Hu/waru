@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://br6lcrqdni2g3"]
-
-[ext_resource type="Script" uid="uid://cmrlosd8g228" path="res://entities/lattice/anchor/lair/lair.gd" id="1_ew40p"]
-
-[node name="Lair" type="Node2D"]
-script = ExtResource("1_ew40p")
