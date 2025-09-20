@@ -17,7 +17,7 @@ var resource: SourceResource:
 
 func _ready() -> void:
 	collision_polygon.polygon = %Terrain.polygon
-
+	
 func init_vertexs() -> void:
 	%Terrain.polygon = resource.vertexs
 	var vertexs = []
@@ -27,8 +27,8 @@ func init_vertexs() -> void:
 		vertexs.append(vertex)
 	
 	%Element.polygon = vertexs
-
-func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event.is_action_pressed("click"):
-		lattice.expedition.source_info.source = self
-		lattice.selected.position = resource.center - lattice.selected.size / 2
+	
+func _on_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
+	if _event.is_action_pressed("click"):
+		lattice.select_source(self)
+	

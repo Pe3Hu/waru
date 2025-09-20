@@ -23,6 +23,8 @@ var center_position: Vector2
 var anchor_r: float = 6
 var grid_step: float = 50
 var avg_lair_acreage: float = 100
+var lair_ring_factor: float = 0.5
+var habitat_l: float = 40
 
 var n_dimension: int = 7
 var border_width: int = 3
@@ -651,11 +653,11 @@ func init_lairs() -> void:
 		
 		sizes[source.lairs.size()] += 1
 	
-	var keys = sizes.keys()
-	keys.sort()
-	
-	for key in keys:
-		print([key, sizes[key]])
+	#var keys = sizes.keys()
+	#keys.sort()
+	#
+	#for key in keys:
+		#print([key, sizes[key]])
 	
 	#var min_concentration = 1000
 	#var avg_concentration = 0
@@ -668,8 +670,6 @@ func init_lairs() -> void:
 			#max_concentration = lair.concentration
 		#if lair.concentration < min_concentration:
 			#min_concentration = lair.concentration
-	
-	
 	
 	#var beasts = {}
 	#

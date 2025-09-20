@@ -49,6 +49,9 @@ func _ready() -> void:
 	init_roads()
 	init_sources()
 	
+	await get_tree().create_timer(0.05).timeout
+	#select_source(sources.get_child(0))
+	
 func init_anchors() -> void:
 	for anchor_resource in resource.anchors:
 		var anchor = anchor_scene.instantiate()
@@ -163,3 +166,6 @@ func recolor_region_based_on_domain_index() -> void:
 		var hue = float(index) / resource.domains.size()
 		region.color = Color.from_hsv(hue, 0.9, 0.7)
 	
+func select_source(source_: Source) -> void:
+	expedition.source_info.source = source_
+	selected.position = source_.resource.center - selected.size / 2

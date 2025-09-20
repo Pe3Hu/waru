@@ -4,8 +4,11 @@ extends Resource
 
 var source: SourceResource
 var breed: BreedResource
+var habitat: HabitatResource
 
 var flocks: Array[FlockResource]
+
+var ring: int
 
 var acreage: float
 var concentration: float
@@ -23,3 +26,9 @@ func devastation() -> void:
 	
 	for lair in source.lairs:
 		lair.acreage += split_acreage
+	
+func split() -> void:
+	var lair_acreage = acreage / 2
+	acreage -= lair_acreage
+	var beast_kind = breed.kind
+	source.anchor.lattice.add_lair(source, lair_acreage, beast_kind)

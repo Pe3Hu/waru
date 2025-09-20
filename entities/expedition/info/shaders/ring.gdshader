@@ -1,11 +1,10 @@
 shader_type canvas_item;
 
-const int num_colors = 2;
-const int num_shares = num_colors - 1;
-uniform vec4 colors[5] : source_color;
-uniform float shares[4];  // The last color gets the remainder
+uniform int num_colors: hint_range(1, 9, 1) = 1;
+uniform vec4 colors[9] : source_color;
+uniform float shares[8];  // The last color gets the remainder
 uniform float relative_size : hint_range(0.0, 1.0, 0.1) = 1.;
-uniform float blur_strength : hint_range(0., .1, .005) = .01;
+uniform float blur_strength : hint_range(0., .1, .005) = .00;
 
 void fragment() {
 	float angle = (atan(.5-UV.y, UV.x-.5) + PI)/(2.*PI);

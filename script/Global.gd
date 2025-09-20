@@ -34,6 +34,8 @@ func init_arr() -> void:
 	
 func init_dict() -> void:
 	init_direction()
+	init_ring()
+	init_windrose()
 	
 	init_biome()
 	init_lair()
@@ -60,6 +62,33 @@ func init_direction() -> void:
 		dict.direction.hybrid.append(direction)
 		direction = dict.direction.diagonal[_i]
 		dict.direction.hybrid.append(direction)
+	
+func init_ring() -> void:
+	dict.ring = {}
+	dict.ring.size = {}
+	dict.ring.size[3] = [1, 1, 1]
+	dict.ring.size[4] = [1, 1, 2]
+	dict.ring.size[5] = [1, 2, 2]
+	dict.ring.size[6] = [1, 2, 3]
+	dict.ring.size[7] = [1, 2, 4]
+	dict.ring.size[8] = [1, 3, 4]
+	dict.ring.size[9] = [1, 3, 5]
+	dict.ring.size[10] = [1, 3, 6]
+	dict.ring.size[11] = [1, 3, 7]
+	dict.ring.size[12] = [1, 4, 7]
+	dict.ring.size[13] = [1, 4, 8]
+	dict.ring.size[14] = [1, 4, 9]
+	dict.ring.size[15] = [1, 5, 9]
+	
+	
+func init_windrose() -> void:
+	dict.windrose = {}
+	dict.windrose.triangle = {}
+	dict.windrose.triangle["NE"] = ["NNE", "ENE"]
+	dict.windrose.triangle["SE"] = ["ESE", "SSE"]
+	dict.windrose.triangle["SW"] = ["SSW", "WSW"]
+	dict.windrose.triangle["NW"] = ["WNW", "NNW"]
+	#dict.windrose.triangle = ["NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"]
 	
 func init_biome() -> void:
 	dict.biome = {}

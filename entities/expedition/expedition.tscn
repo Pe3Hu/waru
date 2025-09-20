@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cwr6fbdi6s3gd"]
 
 [ext_resource type="Script" uid="uid://c6cmv0kv0w2af" path="res://entities/expedition/expedition.gd" id="1_1puxa"]
-[ext_resource type="PackedScene" uid="uid://bhswxq5kch06a" path="res://entities/expedition/info/source_info.tscn" id="2_cedwr"]
+[ext_resource type="PackedScene" uid="uid://bhswxq5kch06a" path="res://entities/expedition/info/source/source_info.tscn" id="2_cedwr"]
 
 [node name="Expedition" type="PanelContainer" node_paths=PackedStringArray("source_info")]
 custom_minimum_size = Vector2(240, 120)

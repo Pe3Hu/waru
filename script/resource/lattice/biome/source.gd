@@ -77,7 +77,6 @@ func roll_lairs() -> void:
 		anchor.lattice.add_lair(self, lair_acreage, beast_kind)
 		free_acreage -= lair_acreage
 	
-	
 	if biome.lattice.lair_count_limit <= lairs.size():
 		var breeds = {}
 		
@@ -95,7 +94,31 @@ func roll_lairs() -> void:
 			var lair = breeds[popular_breed].pop_back()
 			lair.devastation()
 	
+	if 3 > lairs.size():
+		var lair = lairs[0]
+		lair.split()
+	
 	update_lairs_energy()
+	var ring_sizes = Global.dict.ring.size[lairs.size()]
+	var lair_concentrations = lairs.duplicate()
+	lair_concentrations.sort_custom(func (a, b): return a.concentration > b.concentration)
+	
+	var index = 0
+	
+	for _i in ring_sizes.size():
+		var ring = RingResource.new()
+		ring.order = _i
+		rings[_i] = ring
+		
+		for _j in ring_sizes[_i]:
+			#print([_i, _j, index])
+			var lair = lair_concentrations[index]
+			ring.lairs.append(lair)
+			ring.acreage += lair.acreage
+			index += 1
+			lair.ring = _i
+		
+		ring.init_habitats()
 	
 func update_lairs_energy() -> void:
 	for lair in lairs:
