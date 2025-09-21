@@ -31,11 +31,12 @@ func init_arr() -> void:
 		["observation", "agility"],
 		["strength", "observation"],
 	]
+	arr.windrose = ["NE", "E", "SE", "S", "SW", "W", "NW", "N"]
 	
 func init_dict() -> void:
 	init_direction()
-	init_ring()
 	init_windrose()
+	init_ring()
 	
 	init_biome()
 	init_lair()
@@ -80,15 +81,121 @@ func init_ring() -> void:
 	dict.ring.size[14] = [1, 4, 9]
 	dict.ring.size[15] = [1, 5, 9]
 	
+	dict.ring.windrose = {}
+	var shares = {}
+	shares["triangle"] = 1
+	shares["rectangle"] = 2
+	
+	for _i in range(1, 3, 1):
+		dict.ring.windrose[_i] = {}
+		var total_percent = 0
+		
+		for windrose in dict.windrose.part:
+			for part in dict.windrose.part[windrose]:
+				var l = 1
+				var shape = dict.part.shape[part]
+				
+				if shape == "rectangle" and _i == 2:
+					l = 3
+				
+				for _j in l:
+					var part_name = part + str(_j)
+					total_percent += shares[shape]
+					dict.ring.windrose[_i][part_name] = shares[shape]
+		
+		for _j in dict.ring.windrose[_i]:
+			dict.ring.windrose[_i][_j] = float(dict.ring.windrose[_i][_j]) / total_percent
+	
+	#var a = dict.ring.windrose
+	pass
+	#var total_percent = 12
+	#dict.ring.windrose = {}
+	#dict.ring.windrose[1] = {}
+	#dict.ring.windrose[1]["NE"] = [1, 1]
+	#dict.ring.windrose[1]["E"] = [2]
+	#dict.ring.windrose[1]["SE"] = [1, 1]
+	#dict.ring.windrose[1]["S"] = [2]
+	#dict.ring.windrose[1]["SW"] = [1, 1]
+	#dict.ring.windrose[1]["W"] = [2]
+	#dict.ring.windrose[1]["NW"] = [1, 1]
+	#dict.ring.windrose[1]["N"] = [2]
+	#
+	#for windrose in dict.ring.windrose[1]:
+		#for _i in dict.ring.windrose[1][windrose].size():
+			#dict.ring.windrose[1][windrose][_i] = float(dict.ring.windrose[1][windrose][_i]) / total_percent
+	#
+	#total_percent = 20
+	#dict.ring.windrose = {}
+	#dict.ring.windrose[2] = {}
+	#dict.ring.windrose[2]["NE"] = [1, 1]
+	#dict.ring.windrose[2]["E"] = [2, 2, 2]
+	#dict.ring.windrose[2]["SE"] = [1, 1]
+	#dict.ring.windrose[2]["S"] = [2, 2, 2]
+	#dict.ring.windrose[2]["SW"] = [1, 1]
+	#dict.ring.windrose[2]["W"] = [2, 2, 2]
+	#dict.ring.windrose[2]["NW"] = [1, 1]
+	#dict.ring.windrose[2]["N"] = [2, 2, 2]
+	#
+	#for windrose in dict.ring.windrose[2]:
+		#for _i in dict.ring.windrose[2][windrose].size():
+			#dict.ring.windrose[2][windrose][_i] = float(dict.ring.windrose[2][windrose][_i]) / total_percent
 	
 func init_windrose() -> void:
 	dict.windrose = {}
-	dict.windrose.triangle = {}
-	dict.windrose.triangle["NE"] = ["NNE", "ENE"]
-	dict.windrose.triangle["SE"] = ["ESE", "SSE"]
-	dict.windrose.triangle["SW"] = ["SSW", "WSW"]
-	dict.windrose.triangle["NW"] = ["WNW", "NNW"]
-	#dict.windrose.triangle = ["NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"]
+	dict.windrose.part = {}
+	dict.windrose.part["NE"] = ["NNE", "ENE"]
+	dict.windrose.part["E"] = ["E"]
+	dict.windrose.part["SE"] = ["ESE", "SSE"]
+	dict.windrose.part["S"] = ["S"]
+	dict.windrose.part["SW"] = ["SSW", "WSW"]
+	dict.windrose.part["W"] = ["W"]
+	dict.windrose.part["NW"] = ["WNW", "NNW"]
+	dict.windrose.part["N"] = ["N"]
+	#dict.windrose.part = ["NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"]
+	
+	dict.part = {}
+	#dict.part.windrose = {}
+	#dict.part.windrose["NNE"] = "NE"
+	#dict.part.windrose["ENE"] = "NE"
+	#dict.part.windrose["E"] = "E"
+	#dict.part.windrose["ESE"] = "SE"
+	#dict.part.windrose["SSE"] = "SE"
+	#dict.part.windrose["S"] = "S"
+	#dict.part.windrose["SSW"] = "SW"
+	#dict.part.windrose["WSW"] = "SW"
+	#dict.part.windrose["W"] = "W"
+	#dict.part.windrose["WNW"] = "NW"
+	#dict.part.windrose["NNW"] = "NW"
+	#dict.part.windrose["N"] = "N"
+	
+	dict.part.shape = {}
+	dict.part.shape["ESWN"] = "square"
+	dict.part.shape["NNE"] = "triangle"
+	dict.part.shape["ENE"] = "triangle"
+	dict.part.shape["E"] = "rectangle"
+	dict.part.shape["ESE"] = "triangle"
+	dict.part.shape["SSE"] = "triangle"
+	dict.part.shape["S"] = "rectangle"
+	dict.part.shape["SSW"] = "triangle"
+	dict.part.shape["WSW"] = "triangle"
+	dict.part.shape["W"] = "rectangle"
+	dict.part.shape["WNW"] = "triangle"
+	dict.part.shape["NNW"] = "triangle"
+	dict.part.shape["N"] = "rectangle"
+	
+	dict.part.direction = {}
+	dict.part.direction["NNE"] = Vector2i(1, 0)
+	dict.part.direction["ENE"] = Vector2i(0, 1)
+	dict.part.direction["E"] = Vector2i(0, 1)
+	dict.part.direction["ESE"] = Vector2i(0, 1)
+	dict.part.direction["SSE"] = Vector2i(-1, 0)
+	dict.part.direction["S"] = Vector2i(-1, 0)
+	dict.part.direction["SSW"] = Vector2i(-1, 0)
+	dict.part.direction["WSW"] = Vector2i(0, -1)
+	dict.part.direction["W"] = Vector2i(0, -1)
+	dict.part.direction["WNW"] = Vector2i(0, -1)
+	dict.part.direction["NNW"] = Vector2i(1, 0)
+	dict.part.direction["N"] = Vector2i(1, 0)
 	
 func init_biome() -> void:
 	dict.biome = {}

@@ -18,7 +18,6 @@ func _init() -> void:
 	init_ascensions()
 	init_avatars()
 	
-	
 func init_ascensions() -> void:
 	init_defect_values()
 	add_ascension("human", 10)

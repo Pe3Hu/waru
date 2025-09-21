@@ -24,7 +24,10 @@ var anchor_r: float = 6
 var grid_step: float = 50
 var avg_lair_acreage: float = 100
 var lair_ring_factor: float = 0.5
-var habitat_l: float = 40
+
+var ring_l: float = 180
+var habitat_l: float
+var habitat_r: float
 
 var n_dimension: int = 7
 var border_width: int = 3
@@ -34,6 +37,8 @@ var terrain_noise: FastNoiseLite = FastNoiseLite.new()
 
 
 func _init() -> void:
+	habitat_l = ring_l / 5
+	habitat_r = habitat_l * sqrt(2) / 2
 	dimensions = Vector2i.ONE * n_dimension
 	
 	init_anchors()
@@ -47,6 +52,8 @@ func _init() -> void:
 	init_sources()
 	init_biomes()
 	init_energy()
+	
+	init_indexs()
 	
 	init_lairs()
 	
@@ -355,6 +362,11 @@ func init_roads() -> void:
 	
 	for capital_pair in capital_pairs:
 		add_road(capital_pair)
+	
+func init_indexs() -> void:
+	for _i in anchors.size():
+		var anchor = anchors[_i]
+		anchor.index = _i
 	
 func add_road(capitals_: Array) -> void:
 	var road = RoadResource.new()

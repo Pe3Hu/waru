@@ -1,39 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://bhswxq5kch06a"]
+[gd_scene load_steps=7 format=3 uid="uid://bhswxq5kch06a"]
 
 [ext_resource type="Script" uid="uid://cgo83k000022b" path="res://entities/expedition/info/source/source_info.gd" id="1_ro51e"]
-[ext_resource type="Shader" uid="uid://cxnk7wjo7x4cd" path="res://entities/expedition/info/shaders/ring.gdshader" id="2_20vte"]
+[ext_resource type="PackedScene" uid="uid://b8rapekx4gu56" path="res://entities/expedition/info/ring/ring.tscn" id="2_lsimq"]
 [ext_resource type="FontFile" uid="uid://dismhha17os75" path="res://assets/fonts/Diga-SemiBold.ttf" id="2_vpmxm"]
-[ext_resource type="Shader" uid="uid://bgb1qdndy1rsk" path="res://entities/expedition/info/shaders/border.gdshader" id="3_ag6nq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vpmxm"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_20vte"]
-shader = ExtResource("2_20vte")
-shader_parameter/num_colors = 3
-shader_parameter/colors = PackedColorArray(0.092800006, 0.32, 0.1193067, 1, 0.48, 0.48, 0.16800001, 1, 0.40084332, 0.1353, 0.41, 1)
-shader_parameter/shares = PackedFloat32Array(0.47, 0.295)
-shader_parameter/relative_size = 1.0
-shader_parameter/blur_strength = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ag6nq"]
-shader = ExtResource("2_20vte")
-shader_parameter/num_colors = 2
-shader_parameter/colors = PackedColorArray(0.1935, 0.2565666, 0.43, 1, 0.47, 0.07958667, 0.051700007, 1)
-shader_parameter/shares = PackedFloat32Array(0.625, 0)
-shader_parameter/relative_size = 1.0
-shader_parameter/blur_strength = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s4lk6"]
-shader = ExtResource("2_20vte")
-shader_parameter/num_colors = 1
-shader_parameter/colors = PackedColorArray(0.10037332, 0.092800006, 0.32, 1)
-shader_parameter/shares = PackedFloat32Array(1.01)
-shader_parameter/relative_size = 1.0
-shader_parameter/blur_strength = 0.00999999977648
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrbbj"]
-shader = ExtResource("3_ag6nq")
-shader_parameter/density = 7.5
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lsimq"]
+bg_color = Color(0.70380783, 0.70380783, 0.70380783, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_20vte"]
 font = ExtResource("2_vpmxm")
@@ -60,48 +34,25 @@ script = ExtResource("1_ro51e")
 layout_mode = 2
 alignment = 1
 
-[node name="Rings" type="PanelContainer" parent="HBox"]
+[node name="RingPanel" type="PanelContainer" parent="HBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lsimq")
 
-[node name="Lairs" type="Node2D" parent="HBox/Rings"]
+[node name="Rings" type="Node2D" parent="HBox/RingPanel"]
 unique_name_in_owner = true
 
-[node name="Ring2" type="ColorRect" parent="HBox/Rings"]
+[node name="Ring0" parent="HBox/RingPanel/Rings" instance=ExtResource("2_lsimq")]
 unique_name_in_owner = true
-visible = false
-material = SubResource("ShaderMaterial_20vte")
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="Ring1" type="ColorRect" parent="HBox/Rings"]
+[node name="Ring1" parent="HBox/RingPanel/Rings" instance=ExtResource("2_lsimq")]
 unique_name_in_owner = true
-visible = false
-material = SubResource("ShaderMaterial_ag6nq")
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="Ring0" type="ColorRect" parent="HBox/Rings"]
+[node name="Ring2" parent="HBox/RingPanel/Rings" instance=ExtResource("2_lsimq")]
 unique_name_in_owner = true
-visible = false
-material = SubResource("ShaderMaterial_s4lk6")
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="Borders" type="ColorRect" parent="HBox/Rings"]
-visible = false
-material = SubResource("ShaderMaterial_qrbbj")
-layout_mode = 2
-color = Color(0, 0, 0, 0)
 
 [node name="VBox" type="VBoxContainer" parent="HBox"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 alignment = 1
 
@@ -109,8 +60,12 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 label_settings = SubResource("LabelSettings_20vte")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Terrain" type="Label" parent="HBox/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 label_settings = SubResource("LabelSettings_20vte")
+horizontal_alignment = 1
+vertical_alignment = 1

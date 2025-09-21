@@ -14,6 +14,8 @@ var position: Vector2
 
 var flag_side: bool = false
 
+var index: int
+
 
 func update_side_flag() -> void:
 	flag_side = false

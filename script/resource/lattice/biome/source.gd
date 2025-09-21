@@ -65,9 +65,10 @@ func roll_element(exceptions_: Array) -> void:
 	
 	element = Global.get_random_key(options)
 	#%Element.color = Global.dict.color.element[element]
-	roll_lairs()
+	init_lairs()
+	init_rings()
 	
-func roll_lairs() -> void:
+func init_lairs() -> void:
 	var free_acreage = float(acreage)
 	var min_acreage = anchor.lattice.avg_lair_acreage * 0.75
 	
@@ -99,29 +100,39 @@ func roll_lairs() -> void:
 		lair.split()
 	
 	update_lairs_energy()
-	var ring_sizes = Global.dict.ring.size[lairs.size()]
-	var lair_concentrations = lairs.duplicate()
-	lair_concentrations.sort_custom(func (a, b): return a.concentration > b.concentration)
-	
-	var index = 0
-	
-	for _i in ring_sizes.size():
-		var ring = RingResource.new()
-		ring.order = _i
-		rings[_i] = ring
-		
-		for _j in ring_sizes[_i]:
-			#print([_i, _j, index])
-			var lair = lair_concentrations[index]
-			ring.lairs.append(lair)
-			ring.acreage += lair.acreage
-			index += 1
-			lair.ring = _i
-		
-		ring.init_habitats()
 	
 func update_lairs_energy() -> void:
 	for lair in lairs:
 		#lair.acreage = free_acreage / lairs.size()
 		lair.energy = energy / lairs.size()
 		lair.concentration = lair.energy / lair.acreage * 100
+	
+func init_rings() -> void:
+	var ring = RingResource.new()
+	ring.order = 0
+	ring.source = self
+	
+	ring = RingResource.new()
+	ring.order = 1
+	ring.source = self
+	
+	#var ring_sizes = Global.dict.ring.size[lairs.size()]
+	#var lair_concentrations = lairs.duplicate()
+	#lair_concentrations.sort_custom(func (a, b): return a.concentration > b.concentration)
+	#
+	#var index = 0
+	#
+	#for _i in ring_sizes.size():
+		#var ring = RingResource.new()
+		#ring.order = _i
+		#rings[_i] = ring
+		#
+		#for _j in ring_sizes[_i]:
+			##print([_i, _j, index])
+			#var lair = lair_concentrations[index]
+			#ring.lairs.append(lair)
+			#ring.acreage += lair.acreage
+			#index += 1
+			#lair.ring = _i
+		#
+		#ring.init_habitats()

@@ -23,22 +23,22 @@ extends PanelContainer
 var cradle_resource: CradleResource
 var resource: LatticeResource
 
-var clusters: Dictionary
-var anchor_borders: Dictionary
+#var clusters: Dictionary
+#var anchor_borders: Dictionary
+#
+#var dimensions: Vector2i
+#var center_position: Vector2
+#
+#var anchor_r: float = 6
+#var grid_step: float = 50
+#var lair_acreage: float = 100
+#var n_dimension: int = 7
 
-var dimensions: Vector2i
-var center_position: Vector2
-
-var anchor_r: float = 6
-var grid_step: float = 50
-var lair_acreage: float = 100
-var n_dimension: int = 7
-
-var terrain_noise: FastNoiseLite = FastNoiseLite.new()
+#var terrain_noise: FastNoiseLite = FastNoiseLite.new()
 
 
 func _ready() -> void:
-	dimensions = Vector2i.ONE * n_dimension
+	#dimensions = Vector2i.ONE * n_dimension
 	#cradle_resource = CradleResource.new()
 	resource = LatticeResource.new()
 	
@@ -50,7 +50,7 @@ func _ready() -> void:
 	init_sources()
 	
 	await get_tree().create_timer(0.05).timeout
-	#select_source(sources.get_child(0))
+	select_source(sources.get_child(0))
 	
 func init_anchors() -> void:
 	for anchor_resource in resource.anchors:
@@ -58,8 +58,8 @@ func init_anchors() -> void:
 		anchor.resource = anchor_resource
 		anchors.add_child(anchor)
 	
-	var no_corner = resource.clusters[0][dimensions.x - 1][4].position
-	var sw_corner = resource.clusters[dimensions.y - 1][0][1].position
+	var no_corner = resource.clusters[0][resource.dimensions.x - 1][4].position
+	var sw_corner = resource.clusters[resource.dimensions.y - 1][0][1].position
 	var center = (no_corner + sw_corner) / 2
 	var x = abs(no_corner.x - sw_corner.x) + resource.border_width
 	var y = abs(no_corner.y - sw_corner.y) + resource.border_width

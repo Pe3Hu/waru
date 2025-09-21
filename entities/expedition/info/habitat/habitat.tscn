@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://rycy3425kag1"]
+
+[ext_resource type="Script" uid="uid://bjgddr75q56gd" path="res://entities/expedition/info/habitat/habitat.gd" id="1_fohfe"]
+
+[node name="Habitat" type="Area2D"]
+script = ExtResource("1_fohfe")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Kind" type="Polygon2D" parent="."]
+unique_name_in_owner = true
+color = Color(1, 1, 1, 0.462745)
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
