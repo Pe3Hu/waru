@@ -31,7 +31,7 @@ func init_habitats() -> void:
 		return
 	
 	var total_acreage_shares = 0
-	var acreage_shares = [2]
+	var acreage_shares = [1, 1]
 	var acreage_shares_filler = 32
 	
 	for acreage_share in acreage_shares:
@@ -59,14 +59,18 @@ func init_habitats() -> void:
 	var last_part = null
 	var share_datas = []
 	
+	if source.anchor.index == 0:
+		print(percents)
+	
 	for _i in percents.size():
-		var data = {}
-		data.first_percent = 0
-		data.last_percent = 0
-		first_part = last_part
-		var full_parts = []
-		
 		if _i < percents.size() - 1:
+			var data = {}
+			data.first_percent = 0
+			data.last_percent = 0
+			first_part = last_part
+			var full_parts = []
+		
+		#if _i < percents.size() - 1:
 			#var angle_begin = PI * 2 * percents[_i][0]
 			#var angle_end = PI * 2 * percents[_i][1]
 			var percent_remainder = percents[_i][1] - percents[_i][0]
@@ -74,6 +78,8 @@ func init_habitats() -> void:
 			while percent_remainder > 0:
 				var part_percent = Global.dict.ring.windrose[rind_order][current_part]
 				
+				if source.anchor.index == 0:
+					print([_i, current_part, percent_remainder])
 				if first_part != null:
 					data.first_percent = (part_percent - last_percent) / part_percent
 					part_percent = last_percent
@@ -99,15 +105,30 @@ func init_habitats() -> void:
 			data.last_part = last_part
 			share_datas.append(data)
 			#print([_i, current_part, percents[_i][1] - percents[_i][0], first_part, full_parts, last_part, last_percent])
+		else:
+			break
 	
 	for data in share_datas:
 		var habitat = HabitatResource.new()
 		
+		if !data.full_parts.is_empty():
+			for part in data.full_parts:
+				habitat.add_shape(part, [0, 1])
+		
 		if data.last_part != null:
-			habitat.add_shape(data.last_part, [0, data.last_percent])
+			var part_name = data.last_part.erase(data.last_part.length() - 1, 1)
+			var shape = Global.dict.part.shape[part_name]
+			
+			if shape == "rectangle":
+				data.last_percent = 1 -  data.last_percent
+			
+			if data.first_part != null:
+				habitat.add_shape(data.first_part, [data.first_percent, 1 - data.last_percent])
+			else:
+				habitat.add_shape(data.last_part, [0, data.last_percent])
 		
 		habitat.ring = self
 	
 	if source.anchor.index == 0:
-		pass
+		print(share_datas)
 	

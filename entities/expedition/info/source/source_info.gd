@@ -23,7 +23,6 @@ var source: Source:
 		#update_rings()
 
 
-
 func _ready() -> void:
 	ring_panel.custom_minimum_size = Vector2.ONE * expedition.lattice.resource.ring_l
 	rings.position = ring_panel.custom_minimum_size * 0.5

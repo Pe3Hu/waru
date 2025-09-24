@@ -106,7 +106,7 @@ func init_ring() -> void:
 		for _j in dict.ring.windrose[_i]:
 			dict.ring.windrose[_i][_j] = float(dict.ring.windrose[_i][_j]) / total_percent
 	
-	#var a = dict.ring.windrose
+	#var a = dict.ring.windrose[1]
 	pass
 	#var total_percent = 12
 	#dict.ring.windrose = {}
@@ -196,6 +196,57 @@ func init_windrose() -> void:
 	dict.part.direction["WNW"] = Vector2i(0, -1)
 	dict.part.direction["NNW"] = Vector2i(1, 0)
 	dict.part.direction["N"] = Vector2i(1, 0)
+	
+	dict.part.near = {}
+	dict.part.far = {}
+	var orders = [1, 2]
+	
+	for order in orders:
+		dict.part.near[order] = {}
+		dict.part.far[order] = {}
+		
+		for part in dict.part.shape:
+			match dict.part.shape[part]:
+				"triangle":
+					match part:
+						"NNE":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[0] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.linear2[0])
+						"ENE":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[0] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.diagonal[0])
+						"ESE":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[1] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.linear2[1])
+						"SSE":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[1] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.diagonal[1])
+						"SSW":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[2] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.linear2[2])
+						"WSW":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[2] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.diagonal[2])
+						"WNW":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[3] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.linear2[3])
+						"NNW":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[3] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.diagonal[3])
+				"rectangle":
+					match part:
+						"E":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[0] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.linear2[1])
+						"S":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[1] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.linear2[2])
+						"W":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[2] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.linear2[3])
+						"N":
+							dict.part.near[order][part] = Global.dict.direction.diagonal[3] * order * 0.5
+							dict.part.far[order][part] = dict.part.near[order][part] + Vector2(Global.dict.direction.linear2[0])
 	
 func init_biome() -> void:
 	dict.biome = {}

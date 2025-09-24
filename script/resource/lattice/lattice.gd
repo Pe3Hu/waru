@@ -431,7 +431,7 @@ func init_biomes() -> void:
 	
 	var max_d = center_position.length() / n_dimension * 0.75
 	var biome_options = {}
-	var unoccupied_anchors = anchors
+	var unoccupied_anchors = anchors.duplicate()
 	
 	for anchor in anchors:
 		if anchor.flag_side:
