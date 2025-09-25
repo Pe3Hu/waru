@@ -2,7 +2,7 @@ class_name Habitat
 extends Area2D
 
 
-@export var ring: RingResource
+@export var ring: Ring
 
 var resource: HabitatResource:
 	set(value_):
@@ -12,7 +12,9 @@ var resource: HabitatResource:
 
 
 func init_vertexs() -> void:
-	%Kind.color = Color.from_hsv(randf(), 0.8, 0.8)
+	var l = float(resource.ring.source.habaitat_count)
+	var hue = (resource.hue_index) / l
+	%Kind.color = Color.from_hsv(hue, 0.8, 0.8)
 	%Kind.polygon = resource.vertexs
 	%CollisionPolygon2D.polygon = resource.vertexs
 	pass

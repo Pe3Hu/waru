@@ -23,6 +23,8 @@ var element: String
 var acreage: float
 var energy: float
 
+var habaitat_count: int = 0
+
 
 func init_vertexs() -> void:
 	for border in anchor.borders:
@@ -114,6 +116,10 @@ func init_rings() -> void:
 	
 	ring = RingResource.new()
 	ring.order = 1
+	ring.source = self
+	
+	ring = RingResource.new()
+	ring.order = 2
 	ring.source = self
 	
 	#var ring_sizes = Global.dict.ring.size[lairs.size()]
