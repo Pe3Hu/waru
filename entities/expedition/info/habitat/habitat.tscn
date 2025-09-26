@@ -3,13 +3,20 @@
 [ext_resource type="Script" uid="uid://bjgddr75q56gd" path="res://entities/expedition/info/habitat/habitat.gd" id="1_fohfe"]
 
 [node name="Habitat" type="Area2D"]
+z_index = 1
 script = ExtResource("1_fohfe")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 unique_name_in_owner = true
+z_index = 1
 
 [node name="Kind" type="Polygon2D" parent="."]
 unique_name_in_owner = true
 color = Color(1, 1, 1, 0.462745)
+
+[node name="Border" type="Line2D" parent="."]
+unique_name_in_owner = true
+width = 2.0
+default_color = Color(0.12591085, 0.12591085, 0.12591082, 1)
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]

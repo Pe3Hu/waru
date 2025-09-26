@@ -110,35 +110,38 @@ func update_lairs_energy() -> void:
 		lair.concentration = lair.energy / lair.acreage * 100
 	
 func init_rings() -> void:
-	var ring = RingResource.new()
-	ring.order = 0
-	ring.source = self
-	
-	ring = RingResource.new()
-	ring.order = 1
-	ring.source = self
-	
-	ring = RingResource.new()
-	ring.order = 2
-	ring.source = self
-	
-	#var ring_sizes = Global.dict.ring.size[lairs.size()]
-	#var lair_concentrations = lairs.duplicate()
-	#lair_concentrations.sort_custom(func (a, b): return a.concentration > b.concentration)
+	#var ring = RingResource.new()
+	#ring.order = 0
+	#ring.source = self
+	#ring.init_habitats()
 	#
-	#var index = 0
-	#
-	#for _i in ring_sizes.size():
-		#var ring = RingResource.new()
-		#ring.order = _i
-		#rings[_i] = ring
-		#
-		#for _j in ring_sizes[_i]:
-			##print([_i, _j, index])
-			#var lair = lair_concentrations[index]
-			#ring.lairs.append(lair)
-			#ring.acreage += lair.acreage
-			#index += 1
-			#lair.ring = _i
-		#
-		#ring.init_habitats()
+	#ring = RingResource.new()
+	#ring.order = 1
+	#ring.source = self
+	#ring.init_habitats()
+	
+	#ring = RingResource.new()
+	#ring.order = 2
+	#ring.source = self
+	
+	var ring_sizes = Global.dict.ring.size[lairs.size()]
+	var lair_concentrations = lairs.duplicate()
+	lair_concentrations.sort_custom(func (a, b): return a.concentration > b.concentration)
+	
+	var index = 0
+	
+	for _i in ring_sizes.size():
+		var ring = RingResource.new()
+		ring.order = _i
+		ring.source = self
+		rings[_i] = ring
+		
+		for _j in ring_sizes[_i]:
+			#print([_i, _j, index])
+			var lair = lair_concentrations[index]
+			ring.lairs.append(lair)
+			ring.acreage += lair.acreage
+			index += 1
+			lair.ring = _i
+		
+		ring.init_habitats()

@@ -52,6 +52,15 @@ func _ready() -> void:
 	await get_tree().create_timer(0.05).timeout
 	select_source(sources.get_child(0))
 	
+	if resource.defected_source != null:
+		for source in sources.get_children():
+			if source.resource == resource.defected_source:
+				select_source(source)
+				#source.resource.rings[0].analyze_defect()
+				#source.resource.rings[1].analyze_defect()
+				source.resource.rings[2].analyze_defect()
+				break
+	
 func init_anchors() -> void:
 	for anchor_resource in resource.anchors:
 		var anchor = anchor_scene.instantiate()

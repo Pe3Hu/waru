@@ -106,7 +106,7 @@ func init_ring() -> void:
 		for _j in dict.ring.windrose[_i]:
 			dict.ring.windrose[_i][_j] = float(dict.ring.windrose[_i][_j]) / total_percent
 	
-	#var a = dict.ring.windrose[1]
+	#var a = dict.ring.windrose[2]
 	pass
 	#var total_percent = 12
 	#dict.ring.windrose = {}
@@ -345,3 +345,21 @@ func get_acreage_triangle(points_: Array) -> float:
 	var b = points_[1]
 	var c = points_[2]
 	return abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2)
+	
+func check_dots_on_line(dots_: Array[Vector2]) -> bool:
+	var flag_line = false
+	
+	for _i in dots_.size():
+		pass
+	
+	
+	return flag_line
+	
+func check_3_dots_on_line(a_: Vector2, b_: Vector2, c_: Vector2) -> bool:
+	var ab = a_.distance_to(b_)
+	var ac = a_.distance_to(c_)
+	var bc = b_.distance_to(c_)
+	var l = ab + bc - ac 
+	var deviation = 0.1
+	#print()
+	return l < deviation#deviation >= abs(ab + bc - ac)

@@ -27,6 +27,7 @@ offset_right = 42.0
 offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="Lattice" parent="CanvasLayer/HBox" node_paths=PackedStringArray("canvas_layer", "expedition") instance=ExtResource("2_tytc4")]

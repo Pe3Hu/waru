@@ -34,6 +34,7 @@ var border_width: int = 3
 var lair_count_limit: int = 16
 
 var terrain_noise: FastNoiseLite = FastNoiseLite.new()
+var defected_source: SourceResource
 
 
 func _init() -> void:
@@ -665,6 +666,8 @@ func init_lairs() -> void:
 		
 		sizes[source.lairs.size()] += 1
 	
+	fix_defect_ring()
+	
 	#var keys = sizes.keys()
 	#keys.sort()
 	#
@@ -723,3 +726,41 @@ func add_lair(source_: SourceResource, acreage_: float, kind_: String) -> void:
 	
 func init_skills() -> void:
 	pass
+	
+func find_defect_ring() -> void:
+	#for source in sources:
+		#if check_defect_in_last(source.rings[2]):
+			#defected_source = source
+			#return
+	
+	
+	for source in sources:
+		if check_defect_in_corner(source.rings[2]):
+			defected_source = source
+			return
+	
+func fix_defect_ring() -> void:
+	fix_last_habitat()
+	#fix_corner_habitat()
+	
+func fix_last_habitat() -> void:
+	for source in sources:
+		if check_defect_in_last(source.rings[2]):
+			source.rings[2].apply_not_optimal_solution_to_last()
+	
+func fix_corner_habitat() -> void:
+	for source in sources:
+		if check_defect_in_corner(source.rings[2]):
+			source.rings[2].apply_not_optimal_solution_to_corner()
+	
+func check_defect_in_last(ring_: RingResource) -> bool:
+	var begin_vertex = ring_.habitats.front().far_vertexs.front() 
+	var end_vertex = ring_.habitats.back().far_vertexs.back() 
+	
+	return begin_vertex != end_vertex
+	
+func check_defect_in_corner(ring_: RingResource) -> bool:
+	var begin_vertex = ring_.habitats[ring_.habitats.size() - 2].far_vertexs.front() 
+	var end_vertex = ring_.habitats.back().far_vertexs.back() 
+	
+	return begin_vertex != end_vertex

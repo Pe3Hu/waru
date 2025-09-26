@@ -1,10 +1,12 @@
-res://script/resource/lattice/biome/ring.gd
-res://script/resource/lattice/biome/habitat.gd
-res://entities/expedition/info/source/source_info.tscn
+res://entities/world/world.tscn
 res://entities/lattice/anchor/source/source.gdshader
 res://entities/expedition/info/shaders/ring.gdshader
 res://entities/expedition/info/shaders/border.gdshader
-res://entities/expedition/info/habitat/habitat.gd
+res://entities/lattice/lattice.gd
+res://script/resource/lattice/biome/ring.gd
 res://script/resource/lattice/biome/source.gd
-res://script/Global.gd
+res://script/resource/lattice/lattice.gd
+res://script/resource/lattice/biome/habitat.gd
 res://entities/expedition/info/habitat/habitat.tscn
+res://entities/expedition/info/habitat/habitat.gd
+res://script/Global.gd
