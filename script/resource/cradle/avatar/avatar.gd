@@ -4,19 +4,13 @@ extends Resource
 
 var cradle: CradleResource
 var technique: TechniqueResource
+var opponent: AvatarResource
 
 var aspects: Dictionary
 
 var type: String
 
 
-func _init(cradle_: CradleResource, type_: String) -> void:
-	cradle = cradle_
-	type = type_
-	
-	init_aspects()
-	technique = TechniqueResource.new(self)
-	
 func init_aspects() -> void:
 	var aspects_values = {}
 	

@@ -4,6 +4,7 @@ extends Node2D
 
 @onready var habitat_scene = preload("res://entities/expedition/info/habitat/habitat.tscn")
 
+@export var source_info: SourceInfo
 @export var resource: RingResource:
 	set(value_):
 		resource = value_
@@ -19,5 +20,6 @@ func update_habitats() -> void:
 	
 	for habitat_resource in resource.habitats:
 		var habitat = habitat_scene.instantiate()
+		habitat.ring = self
 		habitat.resource = habitat_resource
 		add_child(habitat)

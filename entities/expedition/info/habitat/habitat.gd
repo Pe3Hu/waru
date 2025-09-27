@@ -19,23 +19,21 @@ func init_vertexs() -> void:
 	
 	for vertex in resource.border_vertexs:
 		%Border.add_point(vertex)
-	#%CollisionPolygon2D.polygon = %Kind.polygon
 	
-	var shifeted_vertexs = []
+	%CollisionPolygon2D.polygon = %Kind.polygon
 	
-	for vertex in resource.vertexs:
-		shifeted_vertexs.append(vertex + Vector2(0, 200))
-	
-	%CollisionPolygon2D.polygon = shifeted_vertexs
+	#var shifeted_vertexs = []
+	#
+	#for vertex in resource.vertexs:
+		#shifeted_vertexs.append(vertex + Vector2(0, 200))
+	#
+	#%CollisionPolygon2D.polygon = shifeted_vertexs
 	#
 	if resource.vertexs.is_empty():
 		pass
 	pass
-
-
-
+	
 func _on_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if _event.is_action_pressed("click"):
-		print([resource.ring.order, resource.index, resource.lair.breed.kind])
-		resource.ring.print_vertexs()
+		ring.source_info.flock.resource = resource.lair.flock
 	

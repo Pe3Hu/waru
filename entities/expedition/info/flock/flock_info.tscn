@@ -1,0 +1,133 @@
+[gd_scene load_steps=5 format=3 uid="uid://snlybskaqban"]
+
+[ext_resource type="Script" uid="uid://ckr7qqri2jes1" path="res://entities/expedition/info/flock/flock_info.gd" id="1_pv1vm"]
+[ext_resource type="FontFile" uid="uid://dismhha17os75" path="res://assets/fonts/Diga-SemiBold.ttf" id="2_xsw3o"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pv1vm"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wjo21"]
+font = ExtResource("2_xsw3o")
+font_color = Color(0, 0, 0, 1)
+
+[node name="Flock" type="PanelContainer"]
+custom_minimum_size = Vector2(80, 30)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv1vm")
+script = ExtResource("1_pv1vm")
+
+[node name="HBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Title" type="Label" parent="HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ice Wolf"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Alpha" type="HBoxContainer" parent="HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="AlphaName" type="Label" parent="HBox/Alpha"]
+layout_mode = 2
+text = "Alpha"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AlphaRank" type="Label" parent="HBox/Alpha"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Rank: 19-21"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AlphaCount" type="Label" parent="HBox/Alpha"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Count: 1-3"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Beta" type="HBoxContainer" parent="HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="BetaName" type="Label" parent="HBox/Beta"]
+layout_mode = 2
+text = "Beta"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BetaRank" type="Label" parent="HBox/Beta"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Rank: 13-16"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BetaCount" type="Label" parent="HBox/Beta"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Count: 4-7"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Delta" type="HBoxContainer" parent="HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="DeltaName" type="Label" parent="HBox/Delta"]
+layout_mode = 2
+text = "Delta"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeltaRank" type="Label" parent="HBox/Delta"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Rank: 8-12"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeltaCount" type="Label" parent="HBox/Delta"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Count: 10-12"
+label_settings = SubResource("LabelSettings_wjo21")
+horizontal_alignment = 1
+vertical_alignment = 1

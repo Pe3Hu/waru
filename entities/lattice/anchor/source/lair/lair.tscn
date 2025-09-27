@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bohe45k8loq5l"]
 
-[ext_resource type="Script" uid="uid://xfa3e1k5m823" path="res://entities/expedition/info/lair/lair.gd" id="1_1p5v2"]
+[ext_resource type="Script" uid="uid://xfa3e1k5m823" path="res://entities/lattice/anchor/source/lair/lair.gd" id="1_1p5v2"]
 
 [node name="Lair" type="Area2D"]
 script = ExtResource("1_1p5v2")

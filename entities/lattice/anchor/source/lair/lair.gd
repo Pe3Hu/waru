@@ -18,7 +18,6 @@ func init_vertexs() -> void:
 	var lengths = []
 	
 	if resource.source.ring_lairs[resource.ring].size() == 1:
-		#long = 0.5 * source_info.lair_l
 		var n = 4
 		
 		for _i in n :
@@ -45,7 +44,6 @@ func init_vertexs() -> void:
 		var vertex = Vector2.from_angle(angle) * length
 		vertexs.append(vertex)
 		%Outline.add_point(vertex)
-	
 	
 	%CollisionPolygon2D.polygon = vertexs
 	%Terrain.polygon = vertexs

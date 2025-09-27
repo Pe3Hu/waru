@@ -23,43 +23,31 @@ extends PanelContainer
 var cradle_resource: CradleResource
 var resource: LatticeResource
 
-#var clusters: Dictionary
-#var anchor_borders: Dictionary
-#
-#var dimensions: Vector2i
-#var center_position: Vector2
-#
-#var anchor_r: float = 6
-#var grid_step: float = 50
-#var lair_acreage: float = 100
-#var n_dimension: int = 7
-
-#var terrain_noise: FastNoiseLite = FastNoiseLite.new()
-
 
 func _ready() -> void:
-	#dimensions = Vector2i.ONE * n_dimension
-	#cradle_resource = CradleResource.new()
-	resource = LatticeResource.new()
+	cradle_resource = CradleResource.new()
+	resource = cradle_resource.lattice
+	#resource = LatticeResource.new()#cradle_resource
+	#resource.cradle = cradle_resource
+	#cradle_resource.lattice = resource
 	
-	init_anchors()
-	init_regions()
-	init_borders()
-	init_capitals()
-	init_roads()
-	init_sources()
-	
-	await get_tree().create_timer(0.05).timeout
-	select_source(sources.get_child(0))
-	
-	if resource.defected_source != null:
-		for source in sources.get_children():
-			if source.resource == resource.defected_source:
-				select_source(source)
-				#source.resource.rings[0].analyze_defect()
-				#source.resource.rings[1].analyze_defect()
-				source.resource.rings[2].analyze_defect()
-				break
+	if resource != null:
+		init_anchors()
+		init_regions()
+		init_borders()
+		init_capitals()
+		init_roads()
+		init_sources()
+		
+		await get_tree().create_timer(0.05).timeout
+		select_source(sources.get_child(0))
+		
+		if resource.defected_source != null:
+			for source in sources.get_children():
+				if source.resource == resource.defected_source:
+					select_source(source)
+					source.resource.rings[2].analyze_defect()
+					break
 	
 func init_anchors() -> void:
 	for anchor_resource in resource.anchors:

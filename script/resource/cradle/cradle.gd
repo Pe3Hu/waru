@@ -2,7 +2,11 @@ class_name CradleResource
 extends Resource
 
 
-var avatars: Array[AvatarResource]
+var lattice: LatticeResource
+
+var beasts: Array[BeastResource]
+var humans: Array[HumanResource]
+var encounters: Array[EncounterResource]
 
 var ascensions: Dictionary
 var defect_values: Dictionary
@@ -12,11 +16,14 @@ var limit_axis: int = 8
 var limit_multiplication: int = 25
 var aspect_base_value: int = 10
 var aspect_rnd_value: int = 12
+var encounter_basic_dice_default: int = 4
 
 
 func _init() -> void:
 	init_ascensions()
 	init_avatars()
+	
+	lattice = LatticeResource.new(self)
 	
 func init_ascensions() -> void:
 	init_defect_values()
@@ -41,11 +48,22 @@ func add_ascension(type_: String, a_: float) -> void:
 	ascensions[type_] = ascension
 	
 func init_avatars() -> void:
-	#var avatar = add_avatar("human")
-	pass
+	var subtype = "delta"
+	var prey_flock = FlockResource.new()
+	var hunter_flock = FlockResource.new()
+	var prey = add_beast(prey_flock, subtype)
+	var hunter = add_beast(hunter_flock, subtype)
+	var encounter = add_encounter(hunter, prey)
+	encounter.clash()
 	
-func add_avatar(type_: String) -> AvatarResource:
-	var avatar = AvatarResource.new(self, type_)
-	avatars.append(avatar)
+func add_beast(flock_: FlockResource, subtype_: String) -> BeastResource:
+	var beast = BeastResource.new(self, subtype_)
+	beast.flock = flock_
+	beasts.append(beast)
+	flock_.beasts.append(beast)
+	return beast
 	
-	return avatar
+func add_encounter(hunter_: AvatarResource, prey_: AvatarResource) -> EncounterResource:
+	var encounter = EncounterResource.new(hunter_, prey_)
+	encounters.append(encounter)
+	return encounter

@@ -2,11 +2,14 @@ class_name LairResource
 extends Resource
 
 
-var source: SourceResource
+var source: SourceResource:
+	set(value_):
+		source = value_
+		
+		flock.lair = self
 var breed: BreedResource
 var habitat: HabitatResource
-
-var flocks: Array[FlockResource]
+var flock: FlockResource = FlockResource.new()
 
 var ring: int
 
@@ -15,11 +18,6 @@ var concentration: float
 var energy: float
 
 
-func add_flock() -> void:
-	var flock = FlockResource.new()
-	flock.lair = self
-	flocks.append(flock)
-	
 func devastation() -> void:
 	var split_acreage = acreage / (source.lairs.size() - 1)
 	source.lairs.erase(self)
@@ -32,3 +30,14 @@ func split() -> void:
 	acreage -= lair_acreage
 	var beast_kind = breed.kind
 	source.anchor.lattice.add_lair(source, lair_acreage, beast_kind)
+	
+func spread_energy() -> void:
+	return
+	var free_energy = float(energy)
+	
+	for beast in flock.beasts:
+		free_energy -= beast.consumption
+	
+	while free_energy > 0:
+		var beast = flock.add_beast()
+		free_energy -= beast.consumption

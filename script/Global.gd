@@ -3,13 +3,8 @@ extends Node
 
 var rng = RandomNumberGenerator.new()
 var arr = {}
-var num = {}
-var vec = {}
 var color = {}
 var dict = {}
-var flag = {}
-var node = {}
-var scene = {}
 
 
 func _ready() -> void:
@@ -32,6 +27,7 @@ func init_arr() -> void:
 		["strength", "observation"],
 	]
 	arr.windrose = ["NE", "E", "SE", "S", "SW", "W", "NW", "N"]
+	arr.subtype = ["alpha", "beta", "delta"]
 	
 func init_dict() -> void:
 	init_direction()
@@ -40,6 +36,7 @@ func init_dict() -> void:
 	
 	init_biome()
 	init_lair()
+	init_pool()
 	
 func init_direction() -> void:
 	dict.direction = {}
@@ -106,40 +103,6 @@ func init_ring() -> void:
 		for _j in dict.ring.windrose[_i]:
 			dict.ring.windrose[_i][_j] = float(dict.ring.windrose[_i][_j]) / total_percent
 	
-	#var a = dict.ring.windrose[2]
-	pass
-	#var total_percent = 12
-	#dict.ring.windrose = {}
-	#dict.ring.windrose[1] = {}
-	#dict.ring.windrose[1]["NE"] = [1, 1]
-	#dict.ring.windrose[1]["E"] = [2]
-	#dict.ring.windrose[1]["SE"] = [1, 1]
-	#dict.ring.windrose[1]["S"] = [2]
-	#dict.ring.windrose[1]["SW"] = [1, 1]
-	#dict.ring.windrose[1]["W"] = [2]
-	#dict.ring.windrose[1]["NW"] = [1, 1]
-	#dict.ring.windrose[1]["N"] = [2]
-	#
-	#for windrose in dict.ring.windrose[1]:
-		#for _i in dict.ring.windrose[1][windrose].size():
-			#dict.ring.windrose[1][windrose][_i] = float(dict.ring.windrose[1][windrose][_i]) / total_percent
-	#
-	#total_percent = 20
-	#dict.ring.windrose = {}
-	#dict.ring.windrose[2] = {}
-	#dict.ring.windrose[2]["NE"] = [1, 1]
-	#dict.ring.windrose[2]["E"] = [2, 2, 2]
-	#dict.ring.windrose[2]["SE"] = [1, 1]
-	#dict.ring.windrose[2]["S"] = [2, 2, 2]
-	#dict.ring.windrose[2]["SW"] = [1, 1]
-	#dict.ring.windrose[2]["W"] = [2, 2, 2]
-	#dict.ring.windrose[2]["NW"] = [1, 1]
-	#dict.ring.windrose[2]["N"] = [2, 2, 2]
-	#
-	#for windrose in dict.ring.windrose[2]:
-		#for _i in dict.ring.windrose[2][windrose].size():
-			#dict.ring.windrose[2][windrose][_i] = float(dict.ring.windrose[2][windrose][_i]) / total_percent
-	
 func init_windrose() -> void:
 	dict.windrose = {}
 	dict.windrose.part = {}
@@ -151,23 +114,8 @@ func init_windrose() -> void:
 	dict.windrose.part["W"] = ["W"]
 	dict.windrose.part["NW"] = ["WNW", "NNW"]
 	dict.windrose.part["N"] = ["N"]
-	#dict.windrose.part = ["NNE", "ENE", "ESE", "SSE", "SSW", "WSW", "WNW", "NNW"]
 	
 	dict.part = {}
-	#dict.part.windrose = {}
-	#dict.part.windrose["NNE"] = "NE"
-	#dict.part.windrose["ENE"] = "NE"
-	#dict.part.windrose["E"] = "E"
-	#dict.part.windrose["ESE"] = "SE"
-	#dict.part.windrose["SSE"] = "SE"
-	#dict.part.windrose["S"] = "S"
-	#dict.part.windrose["SSW"] = "SW"
-	#dict.part.windrose["WSW"] = "SW"
-	#dict.part.windrose["W"] = "W"
-	#dict.part.windrose["WNW"] = "NW"
-	#dict.part.windrose["NNW"] = "NW"
-	#dict.part.windrose["N"] = "N"
-	
 	dict.part.shape = {}
 	dict.part.shape["ESWN"] = "square"
 	dict.part.shape["NNE"] = "triangle"
@@ -284,6 +232,33 @@ func init_lair() -> void:
 		for beast in beasts:
 			dict.terrain.element[lair.terrain][lair.element][beast] = lair[beast]
 	
+	dict.ring.subtype = {}
+	dict.ring.subtype[0] = {}
+	dict.ring.subtype[0]["alpha"] = 2
+	dict.ring.subtype[0]["beta"] = 3
+	dict.ring.subtype[1] = {}
+	dict.ring.subtype[1]["alpha"] = 1
+	dict.ring.subtype[1]["beta"] = 4
+	dict.ring.subtype[1]["delta"] = 2
+	dict.ring.subtype[2] = {}
+	dict.ring.subtype[2]["beta"] = 2
+	dict.ring.subtype[2]["delta"] = 5
+	
+	dict.beast = {}
+	dict.beast.consumption = {}
+	dict.beast.consumption["alpha"] = 4
+	dict.beast.consumption["beta"] = 2
+	dict.beast.consumption["delta"] = 1
+	
+	var consumption_weight = 1
+	
+	for subtype in dict.beast.consumption:
+		dict.beast.consumption[subtype] *= consumption_weight 
+	
+func init_pool() -> void:
+	dict.pool = {}
+	dict.pool.basic = {}
+	
 func init_color():
 	var h = 360.0
 	
@@ -361,5 +336,4 @@ func check_3_dots_on_line(a_: Vector2, b_: Vector2, c_: Vector2) -> bool:
 	var bc = b_.distance_to(c_)
 	var l = ab + bc - ac 
 	var deviation = 0.1
-	#print()
-	return l < deviation#deviation >= abs(ab + bc - ac)
+	return l < deviation

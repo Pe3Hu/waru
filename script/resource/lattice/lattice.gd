@@ -2,16 +2,17 @@ class_name LatticeResource
 extends Resource
 
 
-@export var anchors: Array[AnchorResource]
-@export var regions: Array[RegionResource]
-@export var domains: Array[DomainResource]
-@export var borders: Array[BorderResource]
-@export var capitals: Array[CapitalResource]
-@export var roads: Array[RoadResource]
-@export var sources: Array[SourceResource]
-@export var biomes: Array[BiomeResource]
-@export var lairs: Array[LairResource]
+var cradle: CradleResource
 
+var anchors: Array[AnchorResource]
+var regions: Array[RegionResource]
+var domains: Array[DomainResource]
+var borders: Array[BorderResource]
+var capitals: Array[CapitalResource]
+var roads: Array[RoadResource]
+var sources: Array[SourceResource]
+var biomes: Array[BiomeResource]
+var lairs: Array[LairResource]
 
 var clusters: Dictionary
 var anchor_borders: Dictionary
@@ -37,7 +38,10 @@ var terrain_noise: FastNoiseLite = FastNoiseLite.new()
 var defected_source: SourceResource
 
 
-func _init() -> void:
+func _init(cradle_resource_: CradleResource) -> void:
+	cradle = cradle_resource_
+	cradle.lattice = self
+	
 	habitat_l = ring_l / 5
 	habitat_r = habitat_l * sqrt(2) / 2
 	dimensions = Vector2i.ONE * n_dimension
@@ -57,6 +61,7 @@ func _init() -> void:
 	init_indexs()
 	
 	init_lairs()
+	init_flocks()
 	
 func init_anchors() -> void:
 	var vector = Vector2()
@@ -571,12 +576,6 @@ func add_to_biome_options(biome_options_:Dictionary, unoccupied_anchors_: Array,
 			if unoccupied_anchors_.has(neighbor) and neighbor.source.biome == null:
 				biome_options_[biome_].append(neighbor)
 	
-#func get_next_biome_anchor(unoccupied_anchors_: Array, biome_: Biome) -> Variant:
-	#if unoccupied_anchors_[biome_].is_empty():
-		#return null
-	#
-	#return unoccupied_anchors_[biome_].pick_random()
-	
 func init_energy() -> void:
 	var unoccupied_regions = regions
 	var waves = []
@@ -597,8 +596,6 @@ func init_energy() -> void:
 		for anchor in region.anchors:
 			if !region_biomes.has(anchor.source.biome):
 				region_biomes.append(anchor.source.biome)
-		
-		#region.visible = false
 		
 		if region_biomes.size() > 2:
 			next_wave.append(region)
@@ -630,9 +627,6 @@ func init_energy() -> void:
 		for region in wave:
 			var noise_weight = remap(terrain_noise.get_noise_2dv(region.center), min_noise, max_noise, 0, 1)
 			var v = (wave_weight * 4 + noise_weight * 3) / 7
-			#region.color = Color.from_hsv(0.0, 0.0, v)
-			#region.visible = true
-			#region.energy = ceil(pow(1.0 + float(_i + 1) / waves.size(), 3) * 12.5)
 			region.energy = ceil(pow(1.0 + v, 3) * 12.5)
 	
 	for source in sources:
@@ -668,39 +662,6 @@ func init_lairs() -> void:
 	
 	fix_defect_ring()
 	
-	#var keys = sizes.keys()
-	#keys.sort()
-	#
-	#for key in keys:
-		#print([key, sizes[key]])
-	
-	#var min_concentration = 1000
-	#var avg_concentration = 0
-	#var max_concentration = 0
-	#
-	#for lair in lairs:
-		#avg_concentration += lair.concentration / lairs.size()
-		#
-		#if lair.concentration > max_concentration:
-			#max_concentration = lair.concentration
-		#if lair.concentration < min_concentration:
-			#min_concentration = lair.concentration
-	
-	#var beasts = {}
-	#
-	#for lair in lairs:
-		#if !beasts.has(lair.breed.kind):
-			#beasts[lair.breed.kind] = {}
-			#beasts[lair.breed.kind].total = 0
-		#
-		#if !beasts[lair.breed.kind].has(lair.source.element):
-			#beasts[lair.breed.kind][lair.source.element] = 0
-		#
-		#beasts[lair.breed.kind].total += 1
-		#beasts[lair.breed.kind][lair.source.element] += 1
-	#
-	#print(beasts)
-	
 func add_lair(source_: SourceResource, acreage_: float, kind_: String) -> void:
 	var breed = null
 	
@@ -722,7 +683,11 @@ func add_lair(source_: SourceResource, acreage_: float, kind_: String) -> void:
 	lairs.append(lair)
 	source_.lairs.append(lair)
 	
-	lair.add_flock()
+	#lair.add_flock()
+	
+func init_flocks() -> void:
+	for lair in lairs:
+		lair.spread_energy()
 	
 func init_skills() -> void:
 	pass

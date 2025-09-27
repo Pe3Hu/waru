@@ -1,13 +1,13 @@
+VBoxContainer
+Label
+HBoxContainer
+PanelContainer
 Line2D
 Node2D
-PanelContainer
 Polygon2D
 CollisionPolygon2D
 Area2D
 ColorRect
-HBoxContainer
-Label
-VBoxContainer
 CollisionShape2D
 CanvasLayer
 TextureRect

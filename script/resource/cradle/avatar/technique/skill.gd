@@ -9,12 +9,13 @@ var defects: Array[DefectResource]
 var size: Vector2i
 
 var weight: int = 0
-var cooldown: int = 1
+var cooldown: int
 
 
 func _init(technique_: TechniqueResource, size_: Vector2i) -> void:
 	technique = technique_
 	size = size_
+	cooldown = randi_range(3, 5)
 	
 	init_defects()
 	

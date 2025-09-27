@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DiceResource" load_steps=2 format=3 uid="uid://dfwpjjyr5bken"]
+
+[ext_resource type="Script" uid="uid://t3w8wcoum7e3" path="res://script/resource/encounter/dice/dice_involute.gd" id="1_1wqpb"]
+
+[resource]
+script = ExtResource("1_1wqpb")
+aspect = 2
+values = Array[int]([2, 3, 5, 6, 7, 8])
+metadata/_custom_type_script = "uid://t3w8wcoum7e3"
