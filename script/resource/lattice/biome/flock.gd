@@ -10,7 +10,8 @@ var subtypes = {}
 
 func add_beast() -> BeastResource:
 	var subtype = Global.get_random_key(Global.dict.ring.subtype[lair.habitat.ring.order])
-	var beast = lair.source.anchor.lattice.cradle.add_beast(self, subtype)
+	var desire = null
+	var beast = lair.source.anchor.lattice.cradle.add_beast(self, subtype, desire)
 	
 	if !subtypes.has(subtype):
 		subtypes[subtype] = []

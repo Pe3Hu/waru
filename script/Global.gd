@@ -16,8 +16,10 @@ func _ready() -> void:
 	#get_tree().bourse.resource.after_init()
 	
 func init_arr() -> void:
+	arr.dice_value = [1, 2, 3, 4, 5, 6, 7, 8]
 	arr.aspect = ["strength", "agility", "observation", "endurance"]
 	arr.battle_aspect = ["strength", "agility", "observation"]
+	arr.involute = ["basic", "strength", "agility", "observation"]
 	arr.aspect_pair = [
 		["strength", "agility"],
 		["agility", "observation"],
@@ -37,6 +39,7 @@ func init_dict() -> void:
 	init_biome()
 	init_lair()
 	init_pool()
+	init_dice_rolls()
 	
 func init_direction() -> void:
 	dict.direction = {}
@@ -258,6 +261,16 @@ func init_lair() -> void:
 func init_pool() -> void:
 	dict.pool = {}
 	dict.pool.basic = {}
+	
+func init_dice_rolls() -> void:
+	pass
+	#dict.roll = {}
+	#dict.roll.size 
+	#var size_limit = 8
+	
+	#"basic", "strength", "agility", "observation"
+	#var dice_aspects = ["basic", "basic", "basic", "basic", "strength"]
+	#var dice_kit = DiceKitResource.new(dice_aspects)
 	
 func init_color():
 	var h = 360.0

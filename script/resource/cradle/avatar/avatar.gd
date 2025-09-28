@@ -5,6 +5,7 @@ extends Resource
 var cradle: CradleResource
 var technique: TechniqueResource
 var opponent: AvatarResource
+var temper: TemperResource
 
 var aspects: Dictionary
 

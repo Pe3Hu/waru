@@ -21,7 +21,7 @@ var encounter_basic_dice_default: int = 4
 
 func _init() -> void:
 	init_ascensions()
-	init_avatars()
+	init_monte_carlo()
 	
 	lattice = LatticeResource.new(self)
 	
@@ -51,13 +51,15 @@ func init_avatars() -> void:
 	var subtype = "delta"
 	var prey_flock = FlockResource.new()
 	var hunter_flock = FlockResource.new()
-	var prey = add_beast(prey_flock, subtype)
-	var hunter = add_beast(hunter_flock, subtype)
+	var prey_desire = "anger"
+	var hunter_desire = "sloth"
+	var prey = add_beast(prey_flock, subtype, prey_desire)
+	var hunter = add_beast(hunter_flock, subtype, hunter_desire)
 	var encounter = add_encounter(hunter, prey)
 	encounter.clash()
 	
-func add_beast(flock_: FlockResource, subtype_: String) -> BeastResource:
-	var beast = BeastResource.new(self, subtype_)
+func add_beast(flock_: FlockResource, subtype_: String, desire_: String) -> BeastResource:
+	var beast = BeastResource.new(self, subtype_, desire_)
 	beast.flock = flock_
 	beasts.append(beast)
 	flock_.beasts.append(beast)
@@ -67,3 +69,28 @@ func add_encounter(hunter_: AvatarResource, prey_: AvatarResource) -> EncounterR
 	var encounter = EncounterResource.new(hunter_, prey_)
 	encounters.append(encounter)
 	return encounter
+	
+func init_monte_carlo() -> void:
+	var count = 1000
+	var subtype = "delta"
+	var prey_flock = FlockResource.new()
+	var hunter_flock = FlockResource.new()
+	var prey_desire = "greed"
+	var hunter_desire = "sloth"
+	var prey = add_beast(prey_flock, subtype, prey_desire)
+	var hunter = add_beast(hunter_flock, subtype, hunter_desire)
+	var encounter = add_encounter(hunter, prey)
+	
+	var winrate = {}
+	winrate[prey_desire] = 0
+	winrate[hunter_desire] = 0
+	
+	for _i in count:
+		encounter.reset()
+		encounter.clash()
+		
+		if encounter.winner != null:
+			winrate[encounter.winner.temper.desire] += 1
+	
+	#print(winrate)
+	print(float(winrate[hunter_desire]) / count)

@@ -6,6 +6,7 @@ var cradle: CradleResource
 var habitat: HabitatResource
 var hunter: AvatarResource
 var prey: AvatarResource
+var winner: AvatarResource
 
 var avatars: Array[AvatarResource]
 
@@ -30,7 +31,43 @@ func _init(hunter_: AvatarResource, prey_: AvatarResource) -> void:
 	for avatar in avatars:
 		dice_pools[avatar] = DicePoolResource.new(self, avatar)
 	
+	reset()
+	
 func clash() -> void:
+	var counter = 10
+	
+	while clash_flag and counter < 20:
+		counter += 1
+		clash_flag = false
+		
+		for avatar in avatars:
+			var dice_pool = dice_pools[avatar]
+			
+			if dice_pool.is_rerolling:
+				dice_pool.roll_dices()
+				dice_pool.select_value_for_lock()
+				dice_pool.lock_value()
+				#print(dice_pool.lock_forecast)
+				clash_flag = true
+			
+			#var values = dice_pool.rolled_values.keys()
+			#values.sort()
+			
+			#for value in values:
+			#	print([avatars.find(avatar), value, dice_pool.rolled_values[value].size()])
+	
+	#print([dice_pools[hunter].sum, dice_pools[prey].sum])
+	if dice_pools[hunter].sum > dice_pools[prey].sum:
+		winner = hunter
+		
+	if dice_pools[hunter].sum < dice_pools[prey].sum:
+		winner = prey
+	
+	#for avatar in avatars:
+		#print([avatars.find(avatar), dice_pools[avatar].sum, dice_pools[avatar].locked_values])
+	
+func reset() -> void:
+	winner = null
 	clash_flag = true
 	
 	for avatar in avatars:
@@ -57,17 +94,11 @@ func clash() -> void:
 				#for _i in count:
 					#dice_pools[target_avatar].add_dice(aspect)
 	#
+	
 	for avatar in avatars:
 		dice_pools[avatar].update_rolled_dices()
 		
-		for aspect in dice_pools[avatar].aspects:
-			print([avatars.find(avatar), aspect, dice_pools[avatar].aspects[aspect]])
+		#for aspect in dice_pool.aspects:
+		#	print([avatars.find(avatar), aspect, dice_pool.aspects[aspect]])
 	
-	while clash_flag:
-		clash_flag = false
-		
-		for avatar in avatars:
-			dice_pools[avatar].roll_dices()
-			
-			for value in dice_pools[avatar].rolled_values:
-				print([avatars.find(avatar), value, dice_pools[avatar].rolled_values[value].size(), dice_pools[avatar].sum])
+	#avatars.pop_back()

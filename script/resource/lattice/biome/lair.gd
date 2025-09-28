@@ -33,11 +33,11 @@ func split() -> void:
 	
 func spread_energy() -> void:
 	return
-	var free_energy = float(energy)
-	
-	for beast in flock.beasts:
-		free_energy -= beast.consumption
-	
-	while free_energy > 0:
-		var beast = flock.add_beast()
-		free_energy -= beast.consumption
+	#var free_energy = float(energy)
+	#
+	#for beast in flock.beasts:
+		#free_energy -= beast.consumption
+	#
+	#while free_energy > 0:
+		#var beast = flock.add_beast()
+		#free_energy -= beast.consumption
