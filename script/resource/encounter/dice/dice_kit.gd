@@ -7,6 +7,7 @@ var aspect_array: Array[String]
 var aspect_dict: Dictionary
 var value_probabilities: Dictionary
 var chain_probabilities: Dictionary
+var sum_probabilities: Dictionary
 var lock_options: Dictionary
 
 
@@ -20,6 +21,7 @@ func _init(aspects_: Array) -> void:
 		aspect_dict[aspect] += 1
 	
 	init_value_probabilities()
+	#get_avg_chain_sum()
 	#var roll_values = get_roll_values()
 	#analyze_roll(roll_values)
 	
@@ -100,7 +102,7 @@ func calc_chain_probability(combination_: Dictionary, value_: int) -> float:
 	
 	return success_probability * failure_probability
 	
-func init_monte_carlo() -> Dictionary:
+func init_chain_monte_carlo() -> Dictionary:
 	var count = 100000
 	
 	var chains = {}
@@ -185,7 +187,7 @@ func get_analyze_data() -> Array:
 	
 func init_all_chain_probabilities(sizes_: Array, values_: Array) -> void:
 	chain_probabilities = {}
-	#var mc_chains = init_monte_carlo()
+	#var mc_chains = init_chain_monte_carlo()
 	
 	for size in sizes_:
 		chain_probabilities[size] = {}
@@ -210,3 +212,93 @@ func init_all_chain_probabilities(sizes_: Array, values_: Array) -> void:
 				#if abs(error) > 5:
 					#print([size, value, error, chain_probabilities[size][value], mc_chains[size][value]])
 	
+func get_avg_chain_sum() -> float:
+	#var first_time = Time.get_unix_time_from_system()
+	var index_counter = 1
+	
+	for aspect in aspect_array:
+		index_counter *= value_probabilities[aspect].keys().size()
+	
+	var face_indexs = []
+	var face_values = []
+	
+	for _i in index_counter:
+		var indexs = []
+		var values = []
+		var temp_index = int(_i)
+		
+		for _j in aspect_array.size():
+			var probability_keys = value_probabilities[aspect_array[_j]].keys()
+			var index = temp_index % probability_keys.size()
+			var value = probability_keys[index]
+			values.append(value)
+			indexs.append(index)
+			temp_index = temp_index / probability_keys.size()
+		
+		face_indexs.append(indexs)
+		face_values.append(values)
+	
+	var max_sums = {}
+	
+	for _face_values in face_values:
+		var max_sum = 0
+		var face_sums = {}
+		
+		for _face_value in _face_values:
+			if !face_sums.has(_face_value):
+				face_sums[_face_value] = 0
+			
+			face_sums[_face_value] += _face_value
+			if max_sum < face_sums[_face_value]:
+				max_sum = face_sums[_face_value]
+		
+		if !max_sums.has(max_sum):
+			max_sums[max_sum] = []
+		
+		max_sums[max_sum].append(_face_values)
+	
+	var avg_sum = 0
+	
+	for sum in max_sums:
+		for _face_values in max_sums[sum]:
+			var probability = 1
+			
+			for _i in _face_values.size():
+				var aspect = aspect_array[_i]
+				var value = _face_values[_i]
+				probability *= value_probabilities[aspect][value]
+			
+			avg_sum += probability * sum
+	
+	#var second_time = Time.get_unix_time_from_system()
+	#var mc_avg_sum = init_avg_chain_sum_monte_carlo()
+	#var third_time = Time.get_unix_time_from_system()
+	#var a = snappedf((second_time - first_time), 0.01)
+	#var b = snappedf((third_time - second_time), 0.01)
+	#print(["time" , a ,b])
+	#print([round((avg_sum - mc_avg_sum) / avg_sum * 100), avg_sum, mc_avg_sum ])
+	return avg_sum
+	
+func init_avg_chain_sum_monte_carlo() -> float:
+	var count = 1000
+	var avg_sum = 0
+	
+	for _i in count:
+		var roll_values = {}
+		var max_sum = 0
+		
+		for aspect in aspect_array:
+			var value = Global.get_random_key(value_probabilities[aspect])
+			
+			if !roll_values.has(value):
+				roll_values[value] = 0
+			
+			roll_values[value] += 1
+			
+			if max_sum < roll_values[value] * value:
+				max_sum = roll_values[value] * value
+		
+		avg_sum += float(max_sum) / count
+	
+	
+	return avg_sum

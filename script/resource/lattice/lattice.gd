@@ -46,22 +46,22 @@ func _init(cradle_resource_: CradleResource) -> void:
 	habitat_r = habitat_l * sqrt(2) / 2
 	dimensions = Vector2i.ONE * n_dimension
 	
-	init_anchors()
-	init_regions()
-	
-	rnd_shift_anchors()
-	init_borders()
-	init_domains()
-	init_roads()
-	
-	init_sources()
-	init_biomes()
-	init_energy()
-	
-	init_indexs()
-	
-	init_lairs()
-	init_flocks()
+	#init_anchors()
+	#init_regions()
+	#
+	#rnd_shift_anchors()
+	#init_borders()
+	#init_domains()
+	#init_roads()
+	#
+	#init_sources()
+	#init_biomes()
+	#init_energy()
+	#
+	#init_indexs()
+	#
+	#init_lairs()
+	#init_flocks()
 	
 func init_anchors() -> void:
 	var vector = Vector2()

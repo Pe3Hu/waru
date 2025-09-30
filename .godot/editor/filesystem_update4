@@ -1,14 +1,7 @@
-res://script/resource/encounter/dice/dice_kit.gd
-res://script/resource/encounter/dice_pool.gd
-res://script/resource/encounter/dice/forecast.gd
-res://script/resource/encounter/encounter.gd
-res://script/Global.gd
-res://script/resource/cradle/cradle.gd
 res://entities/world/world.tscn
 res://entities/lattice/anchor/source/source.gdshader
 res://entities/expedition/info/shaders/ring.gdshader
 res://entities/expedition/info/shaders/border.gdshader
-res://script/resource/cradle/avatar/temper.gd
-res://script/resource/cradle/avatar/beast.gd
-res://script/resource/lattice/biome/flock.gd
-res://script/resource/cradle/avatar/avatar.gd
+res://script/resource/cradle/cradle.gd
+res://assets/jsons/kit_all_aspects.json
+res://script/Global.gd

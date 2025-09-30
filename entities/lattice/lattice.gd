@@ -32,22 +32,23 @@ func _ready() -> void:
 	#cradle_resource.lattice = resource
 	
 	if resource != null:
-		init_anchors()
-		init_regions()
-		init_borders()
-		init_capitals()
-		init_roads()
-		init_sources()
-		
-		await get_tree().create_timer(0.05).timeout
-		select_source(sources.get_child(0))
-		
-		if resource.defected_source != null:
-			for source in sources.get_children():
-				if source.resource == resource.defected_source:
-					select_source(source)
-					source.resource.rings[2].analyze_defect()
-					break
+		if !resource.anchors.is_empty():
+			init_anchors()
+			init_regions()
+			init_borders()
+			init_capitals()
+			init_roads()
+			init_sources()
+			
+			await get_tree().create_timer(0.05).timeout
+			select_source(sources.get_child(0))
+			
+			if resource.defected_source != null:
+				for source in sources.get_children():
+					if source.resource == resource.defected_source:
+						select_source(source)
+						source.resource.rings[2].analyze_defect()
+						break
 	
 func init_anchors() -> void:
 	for anchor_resource in resource.anchors:

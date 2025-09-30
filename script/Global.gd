@@ -39,7 +39,7 @@ func init_dict() -> void:
 	init_biome()
 	init_lair()
 	init_pool()
-	init_dice_rolls()
+	init_kit()
 	
 func init_direction() -> void:
 	dict.direction = {}
@@ -262,8 +262,21 @@ func init_pool() -> void:
 	dict.pool = {}
 	dict.pool.basic = {}
 	
-func init_dice_rolls() -> void:
-	pass
+func init_kit() -> void:
+	dict.aspects = {}
+	dict.aspects.avg_sum = {}
+	
+	var path = "res://assets/jsons/kit_avg_sum_7.json"
+	var dictionary = load_data(path)
+	
+	for aspects in dictionary:
+		var converted_aspects = aspects.split("|")
+		dict.aspects.avg_sum[converted_aspects] = dictionary[aspects]
+	
+	print(dict.aspects.avg_sum.keys().size())
+	#for aspects in dict.aspects.avg_sum:
+	#	print([aspects, dict.aspects.avg_sum[aspects]])
+	#print(dict.aspects.avg_sum)
 	#dict.roll = {}
 	#dict.roll.size 
 	#var size_limit = 8
@@ -295,7 +308,8 @@ func init_color():
 	
 func save(path_: String, data_): #: String
 	var file = FileAccess.open(path_, FileAccess.WRITE)
-	file.store_string(data_)
+	var json_data = JSON.stringify(data_)
+	file.store_string(json_data)
 	
 func load_data(path_: String):
 	var file = FileAccess.open(path_, FileAccess.READ)

@@ -10,10 +10,12 @@ var lock_forecast: ForecastResource
 var total_dices: Array[DiceResource]
 var locked_dices: Array[DiceResource]
 var rolled_dices: Array[DiceResource]
+var exiled_dices: Array[DiceResource]
 var forecasts: Array[ForecastResource]
 
 var locked_values: Dictionary
 var rolled_values: Dictionary
+var exiled_values: Dictionary
 
 var sum: int
 
@@ -37,8 +39,10 @@ func reset() -> void:
 	rolled_values = {}
 	
 	for _i in encounter.cradle.encounter_basic_dice_default:
-		add_dice("basic")
+		add_dice("observation")
 	
+	add_dice("basic")
+	add_dice("basic")
 	#for _i in 2:
 	#	add_dice("strength")
 	
@@ -81,6 +85,9 @@ func roll_dices() -> void:
 	for value in rolled_values:
 		if !locked_values.has(!value):
 			dice_kit.lock_options[value] = rolled_values[value].size()
+	
+	if dice_kit.lock_options.keys().is_empty():
+		exile_biggest_value()
 	
 func select_value_for_lock() -> void:
 	lock_forecast = null
@@ -141,3 +148,18 @@ func lock_dice(dice_: DiceResource) -> void:
 	locked_dices.append(dice_)
 	locked_values[lock_forecast.locked_value].append(dice_)
 	sum += lock_forecast.locked_value
+	
+func exile_biggest_value() -> void:
+	var options = locked_values.keys()
+	options.sort()
+	var biggest_value = options.back()
+	
+	exiled_values[biggest_value] = []
+	exiled_values[biggest_value].append_array(locked_values[biggest_value])
+	locked_values.erase(biggest_value)
+	
+	for dice in exiled_values[biggest_value]:
+		locked_dices.erase(dice)
+		exiled_dices.append(dice)
+	
+	sum -= biggest_value * exiled_values[biggest_value].size()
